@@ -1,5 +1,7 @@
 GTM-decon: Guided Topic Modeling for Deconvolution of cell types from bulk RNA-seq data
 
+![My Image](main_fig.png)
+
 This approach used guided topic modeling, based on the MixEHR topic modelling engine (Ref:), guided using cell-type labels already generated for single cell RNAseq data (from various approaches such as Seurat, scETM etc) in a manner similar to the sureLDA approach (Ref:), in order to learn cell-type-specific gene signatures corresponding to each topic (where each topic corresponds to a specific cell type). These learnt cell-type-specific gene signatures are then used in inferring the topic mixtures i.e. proportion of cell types from both bulk RNAseq datasets.
 
 Steps involved in the approach:
