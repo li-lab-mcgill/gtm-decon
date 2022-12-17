@@ -6,6 +6,23 @@
 
 MixEHR-Guided is a Unix-style command-line tool. You can compile it on a unix machine.
 
+## INSTALLATION:
+
+To install MixEHR-Guided, you will need to first install armadillo (http://arma.sourceforge.net)
+
+Assuming you are in the mixehr-surelda directory, to compile, simply run:
+```
+make
+```
+
+## Input data:
+See toy_dataset.tar.gz for format of training data (vased on pancreatic scRNA-seq data)
+
+To run GTM-decon, the following files are required:
+
+1. metaData.txt file - Stores information about the phenotypes ie. genes in our case in the format <typeID, pheID, stateCnt> where typeID indicates a distinct phenotype (in this cases genes - designated 1, pheID corresponds to phenotypeID for each gene, ie. gene1, gene2, ... geneN), and stateCnt indicates number of states for phenotype - corresponds to only one state in this case 
+2. trainData.txt file - Stores information about the counts data in the format <cellID, typeID, pheID, stateID, freq> where typeID and pheID correspond to metaData file above, cellID corresponds to the cell IDs, as in 1, 2, 3... M, stateID is 0 based in this case, freq corresponds to value of counts. This information is provided only for those cells and genes where the count is non-zero
+3. priorData.txt file - Stores information about prior probabilites for each cell type for each cell ID in the format <cellID, topicId, priorprob> where topicID corresponds to the metaphenotype ID (corresponding to 'N' topics for 'N' cell types in most of the general cases), starting from an index of 0, and the prior probability for the cell type for that cellID (must be >0 and <=1). GTM works by using the one-hot cell type encodings for the cellIDs to assign prior probabilites. The topic corresponding to the cell type is assigned a prior probability of 0.9, and the rest of the cell types are assigned a value corresponding to 0.1/(number of cell types - 1).
 
 Steps involved in the approach:
 
