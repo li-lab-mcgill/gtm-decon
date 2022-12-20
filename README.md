@@ -47,7 +47,7 @@ The genes.txt file contains the names of the genes used in training, which is us
 
 For validation / test data:
 ```
-      ./singleCellInput_TestData <path_to_input_files/counts_matrix_pp_test.tab> <path_to_output_files/testData.txt>
+./singleCellInput_TestData <path_to_input_files/counts_matrix_pp_test.tab> <path_to_output_files/testData.txt>
 ```
 
 ## Training GTM-decon using scRNA-seq data:
@@ -59,7 +59,7 @@ Flags are:
 	-m: meta file
 	-trp: prior file
 	-i: number of iterations
-	-k: number of topics (for 2-topic model, k = 2 x number of cell types etc.)
+	-k: number of topics (for 2-topic model, k = 2 x number of cell types, for 3-topic model, k = 3 x number of cell types etc.)
 	-n: inference method (JCVB0)
 	--maxcores: maximum number of CPU cores to use
 	--outputIntermediates: (whether output intermediate learned parameters for inspection)
@@ -70,7 +70,12 @@ Flags are:
 	```
 	python3 prepare_bulkRNAseq_input.py --path_input <bulk RNAseq counts input file> --path_save <path to save output files in> --preprocessed_genes <path containing genes used in training set>
 	./bulkRNAseqInput <path to bulkRNAseq input file> <path to bulkRNAseq output file>
-	The main command is: (Note: This uses the normal MixEHR engine, without guided topic modelling)
+        ./gtm-decon -m $scmeta -n JCVB0 --newRSSamplesData $bulkdata -k $K -i $niter --inferenceMethod JCVB0 --maxcores 8 --outputIntermediates \
+	            --trainedModelPrefix <path to trained gtm-decon files>/trainData_JCVB0_nmar_K$k_iter$niter
+	```
+
+
+The main command is: (Note: This uses the normal MixEHR engine, without guided topic modelling)
 
         <Path to MixEHR - Original>/mixehr -m $scmeta -n JCVB0 --newPatsData $bulkRSdata \
                                 --trainedModelPrefix $path/trainData_JCVB0_nmar_K14_iter$file -k $K --inferNewPatientMetaphe \
