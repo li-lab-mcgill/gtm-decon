@@ -66,20 +66,16 @@ Flags are:
 ```	
 
 ## Deconvolution of cell-type proportions in bulk RNA-seq data using trained GTM-decon:
-	The key is to ensure that bulk RNAseq data oonsists of the same genes used in the training data, in the same gene order. The following scripts can be used to transform bulk RNA-seq data accordingly:
-	```
+The key is to ensure that bulk RNAseq data oonsists of the same genes used in the training data, in the same gene order. The following scripts can be used to transform bulk RNA-seq data accordingly:
+```
 python3 prepare_bulkRNAseq_input.py --path_input <bulk RNAseq counts input file> --path_save <path to save output files in> --preprocessed_genes <path containing genes used in training set>
-./bulkRNAseqInput <path to bulkRNAseq input file> <path to bulkRNAseq output file>
-	```
+./bulkRNAseqInput <path to bulkRNAseq input file> <path to bulkRNAseq output file/$bulkdata>
+```
+To deconvolve bulk RNA-seq data based on trained models,
+```
         ./gtm-decon -m $scmeta -n JCVB0 --newRSSamplesData $bulkdata -k $K -i $niter --inferenceMethod JCVB0 --maxcores 8 --outputIntermediates \
 	            --trainedModelPrefix <path to trained gtm-decon files>/trainData_JCVB0_nmar_K$k_iter$niter
-	```
-
-
-The main command is: (Note: This uses the normal MixEHR engine, without guided topic modelling)
-
-        <Path to MixEHR - Original>/mixehr -m $scmeta -n JCVB0 --newPatsData $bulkRSdata \
-                                --trainedModelPrefix $path/trainData_JCVB0_nmar_K14_iter$file -k $K --inferNewPatientMetaphe \
+```
 
 4. Prediction of cell-type associated with a cell and Deconvolution of cell-type mixtures along with estimation of cell-type proportions for bulk RNAseq data
 
