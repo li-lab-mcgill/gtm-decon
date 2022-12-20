@@ -69,14 +69,19 @@ Flags are:
 The key is to ensure that bulk RNAseq data oonsists of the same genes used in the training data, in the same gene order. The following scripts can be used to transform bulk RNA-seq data accordingly:
 ```
 python3 prepare_bulkRNAseq_input.py --path_input <bulk RNAseq counts input file> --path_save <path to save output files in> --preprocessed_genes <path containing genes used in training set>
+```
+To convert it into format required for gtm-decon:
+```
 ./bulkRNAseqInput <path to bulkRNAseq input file> <path to bulkRNAseq output file/$bulkdata>
 ```
 To deconvolve bulk RNA-seq data based on trained models,
 ```
-        ./gtm-decon -m $scmeta -n JCVB0 --newRSSamplesData $bulkdata -k $K -i $niter --inferenceMethod JCVB0 --maxcores 8 --outputIntermediates \
-	            --trainedModelPrefix <path to trained gtm-decon files>/trainData_JCVB0_nmar_K$k_iter$niter
+./gtm-decon -m $scmeta -n JCVB0 --newRSSamplesData $bulkdata -k $K -i $niter --inferenceMethod JCVB0 --maxcores 8 --outputIntermediates \
+            --trainedModelPrefix <path to trained gtm-decon files>/trainData_JCVB0_nmar_K$k_iter$niter
 ```
-
+The output *metagene.csv file is a <sample X topics> matrix, containing the deconvolved topic mixtures for each of the samples. For a one-topic-per-celltype model, the number of topics corresponds to number of celltypes. For a "n-topic-per-celltype" model, the number of topics corresponds to 'n' X celltypes. The following script is used to generate the <sample X celltype> matrix from this file, representing the deconvolved cell-type proportions per file.
+./Metagene_topics_avg <metagene file from previous step> <number of topics> > <metagene_normalized output file.out>
+	
 4. Prediction of cell-type associated with a cell and Deconvolution of cell-type mixtures along with estimation of cell-type proportions for bulk RNAseq data
 
 	The inferred cell type topic mixtures can be used for 2 purposes:
