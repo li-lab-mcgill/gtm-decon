@@ -20,51 +20,33 @@ See toy_dataset.tar.gz for format of training data (vased on pancreatic scRNA-se
 
 To run GTM-decon, the following files are required:
 
-1. metaData.txt file - Stores information about the phenotypes ie. genes in our case in the format <typeID, pheID, stateCnt> where typeID indicates a distinct phenotype (in this cases genes - designated 1, pheID corresponds to phenotypeID for each gene, ie. gene1, gene2, ... geneN), and stateCnt indicates number of states for phenotype - corresponds to only one state in this case 
-2. trainData.txt file - Stores information about the counts data in the format <cellID, typeID, pheID, stateID, freq> where typeID and pheID correspond to metaData file above, cellID corresponds to the cell IDs, as in 1, 2, 3... M, stateID is 0 based in this case, freq corresponds to value of counts. This information is provided only for those cells and genes where the count is non-zero
-3. priorData.txt file - Stores information about prior probabilites for each cell type for each cell ID in the format <cellID, topicId, priorprob> where topicID corresponds to the metaphenotype ID (corresponding to 'N' topics for 'N' cell types in most of the general cases), starting from an index of 0, and the prior probability for the cell type for that cellID (must be >0 and <=1). GTM works by using the one-hot cell type encodings for the cellIDs to assign prior probabilites. The topic corresponding to the cell type is assigned a prior probability of 0.9, and the rest of the cell types are assigned a value corresponding to 0.1/(number of cell types - 1).
+a. metaData.txt file - Stores information about the phenotypes ie. genes in our case in the format <typeID, pheID, stateCnt> where typeID indicates a distinct phenotype (in this cases genes - designated 1, pheID corresponds to phenotypeID for each gene, ie. gene1, gene2, ... geneN), and stateCnt indicates number of states for phenotype - corresponds to only one state in this case 
+b. trainData.txt file - Stores information about the counts data in the format <cellID, typeID, pheID, stateID, freq> where typeID and pheID correspond to metaData file above, cellID corresponds to the cell IDs, as in 1, 2, 3... M, stateID is 0 based in this case, freq corresponds to value of counts. This information is provided only for those cells and genes where the count is non-zero
+c. priorData.txt file - Stores information about prior probabilites for each cell type for each cell ID in the format <cellID, topicId, priorprob> where topicID corresponds to the metaphenotype ID (corresponding to 'N' topics for 'N' cell types in most of the general cases), starting from an index of 0, and the prior probability for the cell type for that cellID (must be >0 and <=1). GTM works by using the one-hot cell type encodings for the cellIDs to assign prior probabilites. The topic corresponding to the cell type is assigned a prior probability of 0.9, and the rest of the cell types are assigned a value corresponding to 0.1/(number of cell types - 1).
 
 These can be generated from single cell RNA-seq (scRNA-seq) count matrices using the following scripts:
 
 Required information from scRNA-seq count matrices:
-        - Count matrix (as cell types x genes)
-	- Meta data corresponding to "Celltype" for each cellID, and "Batch" information corresponding to the individual / sample from which the cellID was obtained
+    - Count matrix (as cell types x genes)
+    - Meta data corresponding to "Celltype" for each cellID, and "Batch" information corresponding to the individual / sample from which the cellID was obtained
 
-       For evaluation purposes, we create an artificial bulk RNAseq dataset from the scRNAseq data (by summing up the number of cells belonging to a cell type from the dataset), and derive a matrix of cell-type proportions based on the artificially constructed set.
+     python3 prepare_single_cell_input_PI_Segerstolpe.py --path_input <path to input file containing scRNAseq data in cells x genes format> --path_save <path to output directory where all the various preprocessing and one-hot encoded cell label files are to be saved>
 
-       A sample python script for generating these required files is as follows: (This should be tweaked according to the dataset)
-
-	python3 bulkRS_from_scRS_PI_Segerstolpe_cellprop.py --input <path to scRNAseq data file in genes x cell types format> --meta <path to meta data file containing cell type information for cellIDs> --output_bRS  <path to which output file containing artificially constructed data should be saved> --output_sc <path to which output file containing filtered scRNAseq data in the correct format should be saved> --sample_order <Sample order in which artificial bulkRS data should be saved> (optional, but preferable) --celltype_order <Order of cell types in the cell proportions file> (optional, but preferable) --output_cp <path to file containing cell type proportions>
-
-  
-   c. Split scRNAseq data into training, validation and test datasets for training and evaluation purposes in the ratio 70:10:20
-
-      Can be generated using the following python script: (Note: This can be used as is for any scRNAseq dataset)
-
+Next, we split scRNAseq data into training, validation and test datasets for training and evaluation purposes in the ratio 70:10:20
       python3 train_test_validation_split.py --path_input <path to directory containing all preprocessed input files> --path_save <path to output directory where all the split files are to be saved>
 
-	    The validation data / test data / simulated bulk data / real bulk data are all stored in the same format as training data. No prior information is available / provided for these.
+The validation data / test data / simulated bulk data / real bulk data are all stored in the same format as training data. No prior information is available / provided for these.
 
-      All these files can be generated using the following C++ scripts:
-
-      For training data,
+From these files, the input files for GTM-decon are generated using these C++ scripts:
+For training data,
       ./singleCellInput <path_to_input_files/counts_matrix_pp_train.tab> <path_to_input_files/cell_labels_oh_train.csv> <path_to_output_files/trainData.txt> <path_to_output_files/priorData.txt> <path_to_output_files/meta.txt> <path_to_output_files/genes.txt>
       The genes.txt file contains the names of the genes used in training, which is useful later on to generate bulk RNAseq data based on the same set of genes.
 
-      For validataion / test data,
+For validataion / test data,
       ./singleCellInput_TestData <path_to_input_files/counts_matrix_pp_test.tab> <path_to_output_files/testData.txt>
 
-	
-   d. Converting the training, validation, and test files into input format required for MixEHR-sureLDA
- 
-      The MixEHR-sureLDA-GTM approach requires the following files for training (corresponding to file formats required by MixEHR-sureLDA):
+## Training GTM-decon using scRNA-seq data:
 
-      1. metaData.txt file - Stores information about the phenotypes ie. genes in our case in the format <typeID, pheID, stateCnt> where typeID indicates a distinct phenotype (in this cases genes - designated 1, pheID corresponds to phenotypeID for each gene, ie. gene1, gene2, ... geneN), and stateCnt indicates number of states for phenotype - corresponds to only one state in this case 
-      2. trainData.txt file - Stores information about the counts data in the format <cellID, typeID, pheID, stateID, freq> where typeID and pheID correspond to metaData file above, cellID corresponds to the cell IDs, as in 1, 2, 3... M, stateID is 0 based in this case, freq corresponds to value of counts. This information is provided only for those cells and genes where the count is non-zero
-      3. priorData.txt file - Stores information about prior probabilites for each cell type for each cell ID in the format <cellID, topicId, priorprob> where topicID corresponds to the metaphenotype ID (corresponding to 'N' topics for 'N' cell types in most of the general cases), starting from an index of 0, and the prior probability for the cell type for that cellID (must be >0 and <=1). GTM works by using the one-hot cell type encodings for the cellIDs to assign prior probabilites. The topic corresponding to the cell type is assigned a prior probability of 0.9, and the rest of the cell types are assigned a value corresponding to 0.1/(number of cell types - 1).
-
-  
-    e. Training using MixEHR-sureLDA-GTM
 
 	The training files are used to generate a model capturing the cell-type specific gene signatures from the single cell RNAseq data using the MixEHR-sureLDA engine. Please see the MixEHR-sureLDA project for indepth details.
 
