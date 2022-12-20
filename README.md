@@ -101,13 +101,13 @@ Most of the steps are essentially similar to that used for cell-type-guided trai
 ## Using GTM-decon as a nested guided topic model to identify cell-type specific differentially expressed genes between phenotypes from bulk RNA-seq data:
 Here, the phenotype-labels are used as primary-level, and cell-types as secondary-level. To generate the training data to reflect these guides,
 ```
-singleCellInput_DE $input_dir/counts_matrix_train.tab $input_dir/cell_labels_oh_train.csv $output_dir/ <number of topics per cell-type> <number of cell-types>
+./singleCellInput_DE $input_dir/counts_matrix_train.tab $input_dir/cell_labels_oh_train.csv $output_dir/ <number of topics per cell-type> <number of cell-types>
 ```
 The approach also requires pre-trained GTM-decon \phi matrices, concatenated X <number of phenotypes> to serve as the input \phi matrix for training. The key is keep transform this matrix to contain the same genes present in the bulk RNAseq data for phenotypes, in the same order. Refer to the script *.sh for an example.
 
 The input cell-type specific pre-trained \phi matrices are fine-tuned to reflect changes in the phenotypes using GTM-decon:
 ```
-gtm-decon --outputIntermediates -f $scdata -m $scmeta -trp $scprior -k $K -i $niter --inferenceMethod JCVB0 --maxcores 10 --presetTopicsPrefix $preset_path
+./gtm-decon --outputIntermediates -f $scdata -m $scmeta -trp $scprior -k $K -i $niter --inferenceMethod JCVB0 --maxcores 10 --presetTopicsPrefix $preset_path
 
 New flag:
 	--presetTopicsPrefix $preset_path //path to the concatenated input phi matrix
