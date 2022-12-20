@@ -90,14 +90,14 @@ For cases where the cell-type proportions are known (ie. for simulated / artific
 ```		
 ./Deconvolution_metrics <path to known cell type proportions file>  <path to inferred meta phenotype file - ie. *_metagene.csv> 
 ```
-To generate simulated dataset from the 20% test data generated from scRNA-seq:
+To generate simulated dataset from the held-out 20% test dataset of scRNA-seq:
 ```
 python3 simulate_bulkRS.py --input $input_dir//counts_matrix_pp_test.tab --cell_label_mapping $input_dir//cell_label_mapping.tab --cell_label_oh $input_dir//cell_labels_oh_test.csv --output $output_dir/simulated_bulkRS/sim_test_pp
 ```
-		
-	
-			
 
-		
-7. Simulation of bulk RNAseq data from scRNAseq data
+## Using GTM-decon for phenotype-guided training of bulk RNA-seq data:
+Most of the steps are essentially similar to that used for cell-type-guided training of scRNA-seq data. The same scripts described above can be used for this purpose. The main difference is in the input bulk RNA-seq data matrix, which is sparsified to make it amenable for working with topic models. Refer to Fig8.R script in the R/ directory for sparsification.
+	
+## Using GTM-decon for nested guided topic modeling to identify cell-type specific differentially expressed genes between phenotypes from bulk RNA-seq data:
+
 
