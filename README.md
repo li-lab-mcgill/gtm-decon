@@ -29,9 +29,9 @@ These can be generated from single cell RNA-seq (scRNA-seq) count matrices using
 Required information from scRNA-seq count matrices:
     Count matrix (as cell types x genes),
     Meta data corresponding to "Celltype" for each cellID, and "Batch" information corresponding to the individual / sample from which the cellID was obtained
-
-     python3 prepare_single_cell_input_PI_Segerstolpe.py --path_input <path to input file containing scRNAseq data in cells x genes format> --path_save <path to output directory where all the various preprocessing and one-hot encoded cell label files are to be saved>
-
+```
+python3 prepare_single_cell_input_PI_Segerstolpe.py --path_input <path to input file containing scRNAseq data in cells x genes format> --path_save <path to output directory where all the various preprocessing and one-hot encoded cell label files are to be saved>
+```
 Next, we split scRNAseq data into training, validation and test datasets for training and evaluation purposes in the ratio 70:10:20
 
       python3 train_test_validation_split.py --path_input <path to directory containing all preprocessed input files> --path_save <path to output directory where all the split files are to be saved>
