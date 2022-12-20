@@ -33,55 +33,43 @@ Required information from scRNA-seq count matrices:
 python3 prepare_single_cell_input_PI_Segerstolpe.py --path_input <path to input file containing scRNAseq data in cells x genes format> --path_save <path to output directory where all the various preprocessing and one-hot encoded cell label files are to be saved>
 ```
 Next, we split scRNAseq data into training, validation and test datasets for training and evaluation purposes in the ratio 70:10:20
-
-      python3 train_test_validation_split.py --path_input <path to directory containing all preprocessed input files> --path_save <path to output directory where all the split files are to be saved>
-
+```
+python3 train_test_validation_split.py --path_input <path to directory containing all preprocessed input files> --path_save <path to output directory where all the split files are to be saved>
+```
 The validation data / test data / simulated bulk data / real bulk data are all stored in the same format as training data. No prior information is available / provided for these.
 
 From these files, the input files for GTM-decon are generated using these C++ scripts:
 For training data:
+```
+./singleCellInput <path_to_input_files/counts_matrix_pp_train.tab> <path_to_input_files/cell_labels_oh_train.csv> <path_to_output_files/trainData.txt> <path_to_output_files/priorData.txt> <path_to_output_files/meta.txt> <path_to_output_files/genes.txt>
+``` 
+The genes.txt file contains the names of the genes used in training, which is useful later on to generate bulk RNAseq data based on the same set of genes.
 
-      ./singleCellInput <path_to_input_files/counts_matrix_pp_train.tab> <path_to_input_files/cell_labels_oh_train.csv> <path_to_output_files/trainData.txt> <path_to_output_files/priorData.txt> <path_to_output_files/meta.txt> <path_to_output_files/genes.txt>
-      The genes.txt file contains the names of the genes used in training, which is useful later on to generate bulk RNAseq data based on the same set of genes.
-
-For validataion / test data:
-
+For validation / test data:
+```
       ./singleCellInput_TestData <path_to_input_files/counts_matrix_pp_test.tab> <path_to_output_files/testData.txt>
+```
 
 ## Training GTM-decon using scRNA-seq data:
-	The training files are used to generate a model capturing the cell-type specific gene signatures from the single cell RNAseq data using the MixEHR-sureLDA engine. Please see the MixEHR-sureLDA project for indepth details.
+```
+./gtm-decon -f $scdata -m $scmeta -trp $scprior -k $K -i $niter --inferenceMethod JCVB0 --maxcores 8 --outputIntermediates
 
-	The main command is: (Note: This uses the MixEHR-sureLDA-GTM engine; this differs from MixEHR-sureLDA in one respect - the setting of prior probabilities to alpha - the former multiplies the default value of alpha with prior probability; the GTM version adds the prior probability to default value of alpha)
-
-	<Path to MixEHR-sureLDA-GTM>/mixehr -f $scdata -m $scmeta -trp $scprior -k $K -i $niter \
-        --inferenceMethod JCVB0 --maxcores 8 --outputIntermediates
-
-	Flags are:
+Flags are:
 	-f: single cell training data file
 	-m: meta file
 	-trp: prior file
 	-i: number of iterations
-	-k: number of topics / celltypes
+	-k: number of topics (for 2-topic model, k = 2 x number of cell types etc.)
 	-n: inference method (JCVB0)
 	--maxcores: maximum number of CPU cores to use
 	--outputIntermediates: (whether output intermediate learned parameters for inspection)
+```	
 
-
-2. Preparation of bulk RNAseq data as input to MixEHR-sureLDA-GTM
-
-	The key is to ensure that bulk RNAseq data is transformed into a counts matrix of format samples x genes, where the genes correspond to genes found in training data, in the same gene order, using this script:
-	
+## Deconvolution of cell-type proportions in bulk RNA-seq data using trained GTM-decon:
+	The key is to ensure that bulk RNAseq data is transformed to be in the same gene order as scRNA-seq data used for training. For this, we transform the bulk RNA-seq data into a counts matrix of the format samples x genes, where the genes correspond to genes found in training data, in the same gene order, using this script:
+	```
 	python3 prepare_bulkRNAseq_input.py --path_input <bulk RNAseq counts input file> --path_save <path to save output files in> --preprocessed_genes <path containing genes used in training set>
-
-	The output file is converted into format suitable for MixEHR using following script:
-	
 	./bulkRNAseqInput <path to bulkRNAseq input file> <path to bulkRNAseq output file>
-
-
-3. Inference of cell-type topic mixtures
-
-	Based on the trained guided topic model cell type specific gene-signatures, MixEHR is used for inference of cell-type topic mixtures in test scRNAseq data / simulated bulkRNAseq data / real bulkRNAseq data
-
 	The main command is: (Note: This uses the normal MixEHR engine, without guided topic modelling)
 
         <Path to MixEHR - Original>/mixehr -m $scmeta -n JCVB0 --newPatsData $bulkRSdata \
