@@ -65,7 +65,7 @@ Flags are:
 	--outputIntermediates: (whether output intermediate learned parameters for inspection)
 ```	
 
-## Deconvolution of cell-type proportions in bulk RNA-seq data using trained GTM-decon:
+## Deconvolution of cell-type proportions in bulk RNA-seq data using trained single cell models:
 The key is to ensure that bulk RNAseq data oonsists of the same genes used in the training data, in the same gene order. The following scripts can be used to transform bulk RNA-seq data accordingly:
 ```
 python3 prepare_bulkRNAseq_input.py --path_input <bulk RNAseq counts input file> --path_save <path to save output files in> --preprocessed_genes <path containing genes used in training set>
