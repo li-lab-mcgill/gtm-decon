@@ -2,12 +2,12 @@
 
 ![My Image](main_fig.png)
 
-**GTM-decon model overview:** 
+**GTM-decon overview:** 
 We developed GTM-decon to model cell-type information from scRNA-seq data and subsequently use it to deconvolve bulk RNA-seq data. GTM-decon works by factorizing the gene expression data from the large single-cell gene expression datasets (cells-by-genes matrices) into two matrices: a genes-by-topics (i.e., cell type) matrix (&Phi; capturing the importance of gene expression of each gene for each cell type, and a cells-by-topics matrix (&theta;) capturing the importance of different topics (i.e., cell types) in each cell. The modelling is guided by the prior knowledge of cell type labels in the scRNA-seq datasets. Each cell-type is modelled as a topic (or a set of topics). This guides the topic inference (&theta;) to anchor each topic at a specific cell type and subsequently influences the genes-by-topics (&Phi;) inference. The latter as a global parameter is subsequently used to infer the cell-type proportion in a bulk RNA-seq sample, which manifests as averaged gene expression from all cell types in a tissue of interest. Deconvolution of bulk RNA-seq datasets enables their segregation into different constituent cell types, thereby elucidating their cell-type proportions. This in turn can be used as a surrogate to gauge the cognate biological states of the subjects, such as their health status or disease progression.
 
 GTM-decon is a Unix-style command-line tool. You can compile it on a unix machine.
 
-## INSTALLATION:
+## Installation:
 
 To install GTM-decon, you will need to first install armadillo (http://arma.sourceforge.net)
 
@@ -16,7 +16,7 @@ Assuming you are in the gtm-decon directory, to compile, simply run:
 make
 ```
 
-## Input data:
+## Preparing data:
 See toy_dataset.tar.gz for format of training data (vased on pancreatic scRNA-seq data)
 
 To run GTM-decon, the following files are required:
