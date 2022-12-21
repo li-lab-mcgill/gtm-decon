@@ -104,12 +104,12 @@ Here, the phenotype-labels are used as primary-level, and cell-types as secondar
 ```
 ./singleCellInput_DE $input_dir/counts_matrix_train.tab $input_dir/cell_labels_oh_train.csv $output_dir/ <number of topics per cell-type> <number of cell-types>
 ```
-The approach also requires pre-trained GTM-decon \phi matrices, concatenated X <number of phenotypes> to serve as the input \phi matrix for training. The key is keep transform this matrix to contain the same genes present in the bulk RNAseq data for phenotypes, in the same order. Refer to the script *.sh for an example.
+The approach also requires pre-trained GTM-decon &Phi; matrices, concatenated X <number of phenotypes> to serve as the input &Phi; matrix for training. The key is keep transform this matrix to contain the same genes present in the bulk RNAseq data for phenotypes, in the same order. Refer to the script *.sh for an example.
 
-The input cell-type specific pre-trained \phi matrices are fine-tuned to reflect changes in the phenotypes using GTM-decon:
+The input cell-type specific pre-trained &Phi; matrices are fine-tuned to reflect changes in the phenotypes using GTM-decon:
 ```
 ./gtm-decon --outputIntermediates -f $scdata -m $scmeta -trp $scprior -k $K -i $niter --inferenceMethod JCVB0 --maxcores 10 --presetTopicsPrefix $preset_path
 
 New flag:
-	--presetTopicsPrefix $preset_path //path to the concatenated input phi matrix
+	--presetTopicsPrefix $preset_path //path to the concatenated input &Phi; matrix
 ```
