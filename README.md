@@ -111,5 +111,5 @@ The input cell-type specific pre-trained &Phi; matrices are fine-tuned to reflec
 ./gtm-decon --outputIntermediates -f $scdata -m $scmeta -trp $scprior -k $K -i $niter --inferenceMethod JCVB0 --maxcores 10 --presetTopicsPrefix $preset_path
 
 New flag:
-	--presetTopicsPrefix $preset_path //path to the concatenated input &Phi; matrix
+	--presetTopicsPrefix $preset_path (path to the concatenated input &Phi; matrix)
 ```
