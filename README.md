@@ -17,13 +17,13 @@ make
 ```
 
 ## Preparing data:
-See toy_dataset.tar.gz for format of training data (vased on pancreatic scRNA-seq data)
+See toy_dataset.tar.gz for format of training data (based on pancreatic scRNA-seq data)
 
 To run GTM-decon, the following files are required:
 
 a. metaData.txt file - Stores information about the phenotypes ie. genes in the format <typeID, geneID, stateCnt> where typeID indicates a distinct phenotype (in this cases gene expression - designated 1, geneID corresponds to geneID for each gene, ie. gene1, gene2, ... geneN), and stateCnt indicates number of states for phenotype - corresponds to only one state in this case 
 b. trainData.txt file - Stores information about the counts data in the format <cellID, typeID, gebeID, stateID, freq> where typeID and geneID correspond to metaData file above, cellID corresponds to the cell IDs, as in 1, 2, 3... M, stateID is 0 based in this case, freq corresponds to value of counts. This information is provided only for those cells and genes where the count is non-zero
-c. priorData.txt file - Stores information about prior probabilites for each cell type for each cellID in the format <cellID, topicId, priorprob> where topicID corresponds to the metageneID (corresponding to 'N' topics for 'N' cell types in most of the general cases), starting from an index of 0, and the prior probability for the cell type for that cellID (must be >0 and <=1). GTM works by using the one-hot cell type encodings for the cellIDs to assign prior probabilites. The topic corresponding to the cell type is assigned a prior probability of 0.9, and the rest of the cell types are randomly assigned a value ranging between 0.01-0.1, for a 1-topic-per-celltype. For 2, 3, 4, and 5 topics- per cell-type models, the topics corresponding to the cell type is assigned a prior probability of 0.45, 0.3, 0,225, and 0.18 respectively, whereas the rest of the topics are randomly assigned a value ranging between 0.001-0.01.
+c. priorData.txt file - Stores information about prior probabilites for each cell type for each cellID in the format <cellID, topicId, priorprob> where topicID corresponds to the metageneID (corresponding to 'N' topics for 'N' cell types in most of the general cases), starting from an index of 0, and the prior probability for the cell type for that cellID (must be >0 and <=1). GTM works by using the one-hot cell type encodings for the cellIDs to assign prior probabilites. The topic corresponding to the cell type is assigned a prior probability of 0.9, and the rest of the cell types are randomly assigned a value ranging between 0.01-0.1, for a 1-topic-per-celltype. For 2, 3, 4, and 5 topics- per cell-type models, the topics corresponding to the cell type is assigned a prior probability of 0.45, 0.33, 0.225, and 0.18 respectively, whereas the rest of the topics are randomly assigned a value ranging between 0.001-0.01.
 
 These can be generated from single cell RNA-seq (scRNA-seq) count matrices using the following scripts:
 
