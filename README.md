@@ -79,7 +79,7 @@ To deconvolve bulk RNA-seq data based on trained models,
 ```
 ./gtm-decon -m $scmeta -n JCVB0 --newRSSamplesData $bulkdata -k $K \
             --trainedModelPrefix <path to trained gtm-decon files>/trainData_JCVB0_nmar_K$k_iter$niter \
-	    --inferNewSampleRSMetagene --inferPatParams_maxiter 100
+	    --inferNewSampleRSMetagene --inferRSSampleParams_maxiter 100
 ```
 The output *metagene.csv file is a <samples X topics> matrix, containing the deconvolved topic mixture proportions for each of the samples. For a one-topic-per-celltype model, the number of topics corresponds to number of celltypes. For a "n-topic-per-celltype" model, the number of topics corresponds to 'n' X celltypes. The following script is used to generate the <samples X celltypes> matrix from this file, representing the deconvolved cell-type proportions per sample.
 ```
