@@ -386,8 +386,6 @@ JCVB0* Decon::parseTrainedModelFiles() {
 
 	jcvb0->mar = mar;
 
-	jcvb0->imp = imputeNewSampleRSData || inferTrainRSSampleMetagene_only;
-
 	return jcvb0;
 }
 
@@ -465,88 +463,6 @@ JCVB0* Decon::parseNewData() {
 	return jcvb0;
 }
 
-
-void Decon::parseImputeTargetsFile() {
-
-	// parse meta data file
-	ifstream targetsfile(imputeTargetsFile.c_str());
-
-	int typeId,geneId;
-
-
-	while(targetsfile >> typeId >> geneId) {
-
-//		cout << "typeId: " << typeId << "; geneId: " << geneId << endl;
-
-		unordered_map<pair<int,int>, GeneParams*>::const_iterator gene_hasit = geneParamsMap->find(make_pair(typeId,geneId));
-
-		if(gene_hasit != geneParamsMap->end()) {
-			geneImputeTargets.push_back(make_pair(typeId, geneId));
-		} else {
-			cout << "typeId: " << typeId << "; geneId: " << geneId << endl;
-			throw::runtime_error("target genotype is not defined in the metainfo file");
-		}
-
-	}
-
-	targetsfile.close();
-}
-
-
-
-
-
-
-
-
-void Decon::parseImputeRSSampleDataFile(JCVB0* jcvb0) {
-
-	// parse RSSample data file
-	ifstream datafile(imputeRSSampleDataFile.c_str());
-
-	int RSSampleId,typeId,geneId,stateId,freq;
-
-	bool eof = false;
-
-	if(!(datafile >> RSSampleId >> typeId >> geneId >> stateId >> freq)) {
-		eof = true;
-	}
-
-//	printf("RSSampleId: %d; typeId: %d; geneId: %d; stateId: %d; freq: %d\n", RSSampleId,typeId,geneId,stateId,freq);
-
-	while(!eof) {
-
-		unordered_map<pair<int, int>, int>* geneMap = new unordered_map<pair<int, int>, int>();
-
-		int oldRSSampleId = RSSampleId;
-
-		while(RSSampleId == oldRSSampleId) {
-
-			(*geneMap)[make_pair(typeId,geneId)] = freq;
-			
-			if(!(datafile >> RSSampleId >> typeId >> geneId >> stateId >> freq)) {
-				eof = true;
-				break;
-			}
-
-//			printf("RSSampleId: %d; typeId: %d; geneId: %d; stateId: %d; freq: %d\n", RSSampleId,typeId,geneId,stateId,freq);
-		}
-
-		SampleRS* newRSSample = new SampleRS(oldRSSampleId,
-				*geneMap,
-				numOfTopics);
-
-		jcvb0->imputeTargetRSSamples->push_back(*newRSSample);
-	}
-
-	datafile.close();
-
-	jcvb0->D_impute = jcvb0->imputeTargetRSSamples->size();
-
-	printf("imputeTargetRSSamples: %d\n", (int)jcvb0->D_impute);
-	printf("Impute target data file parsing completed.\n");
-	cout << "--------------------" << endl;
-}
 
 void Decon::parsePhiFixed() {
 

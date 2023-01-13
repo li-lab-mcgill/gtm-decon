@@ -2,6 +2,8 @@
 
 #For TCGA-BRCA:
 #python3 train_test_split_bulkRS_BRCA.py --path_input ~/projects/scDECON_CANCER/data/TCGA/BRCA/gdac.broadinstitute.org_BRCA.Merge_rnaseqv2__illuminahiseq_rnaseqv2__unc_edu__Level_3__RSEM_genes_normalized__data.Level_3.2016012800.0.0/BRCA.pp.uniq.stage.tab --path_save ~/projects/scDECON_CANCER/data/TCGA/BRCA/gdac.broadinstitute.org_BRCA.Merge_rnaseqv2__illuminahiseq_rnaseqv2__unc_edu__Level_3__RSEM_genes_normalized__data.Level_3.2016012800.0.0/stage/
+#python3 train_test_split_bulkRS_BRCA.py --path_input ~/projects/scDECON_CANCER/data/TCGA/BRCA/gdac.broadinstitute.org_BRCA.Merge_rnaseqv2__illuminahiseq_rnaseqv2__unc_edu__Level_3__RSEM_genes_normalized__data.Level_3.2016012800.0.0/BRCA.hvg.TNBC_ER.tab --path_save ~/projects/scDECON_CANCER/data/TCGA/BRCA/gdac.broadinstitute.org_BRCA.Merge_rnaseqv2__illuminahiseq_rnaseqv2__unc_edu__Level_3__RSEM_genes_normalized__data.Level_3.2016012800.0.0/BRCA_hvg_TNBC_ER/
+#python3 train_test_split_bulkRS_BRCA.py --path_input ~/projects/scDECON_CANCER/data/TCGA/BRCA/gdac.broadinstitute.org_BRCA.Merge_rnaseqv2__illuminahiseq_rnaseqv2__unc_edu__Level_3__RSEM_genes_normalized__data.Level_3.2016012800.0.0/BRCA.hvg.type_2sets.tab --path_save ~/projects/scDECON_CANCER/data/TCGA/BRCA/gdac.broadinstitute.org_BRCA.Merge_rnaseqv2__illuminahiseq_rnaseqv2__unc_edu__Level_3__RSEM_genes_normalized__data.Level_3.2016012800.0.0/BRCA_hvg_type_2sets/
 
 import numpy as np
 import pandas as pd
@@ -29,11 +31,11 @@ orig_X = X
 #label_all =  np.array([label_map[i] for i in X['pathologic_stage']])
 
 #label_map={'infiltrating_ductal_carcinoma': 0, 'infiltrating_lobular_carcinoma': 1, 'medullary_carcinoma': 2, 'metaplastic_carcinoma': 3, 'mixed_histology': 4, 'mucinous_carcinoma': 5, 'other': 6}
-#label_map={'infiltrating_ductal_carcinoma': 0, 'infiltrating_lobular_carcinoma': 1}
-#label_all =  np.array([label_map[i] for i in X['histological_type']])
+label_map={'infiltrating_ductal_carcinoma': 0, 'infiltrating_lobular_carcinoma': 1}
+label_all =  np.array([label_map[i] for i in X['histological_type']])
 
-label_map={'TNBC': 0, 'ER+': 1}
-label_all =  np.array([label_map[i] for i in X['Subtype']])
+#label_map={'TNBC': 0, 'ER+': 1}
+#label_all =  np.array([label_map[i] for i in X['Subtype']])
 
 #Save cell labels as one hot encoding
 a = np.array(label_all)
@@ -44,10 +46,10 @@ np.savetxt(args.path_save+'cell_labels_oh.csv',b,delimiter=",")
 
 orig_X.drop('Unnamed:0',axis=1,inplace=True)
 #orig_X.drop('pathologic_stage',axis=1,inplace=True)
-#orig_X.drop('histological_type',axis=1,inplace=True)
-orig_X.drop('Subtype',axis=1,inplace=True)
-orig_X.drop('PAM50',axis=1,inplace=True)
-orig_X.drop('ER_IHC',axis=1,inplace=True)
+orig_X.drop('histological_type',axis=1,inplace=True)
+#orig_X.drop('Subtype',axis=1,inplace=True)
+#orig_X.drop('PAM50',axis=1,inplace=True)
+#orig_X.drop('ER_IHC',axis=1,inplace=True)
 print('Saving counts matrix...')
 orig_X.to_csv(args.path_save+'counts_matrix.tab',sep="\t")
 

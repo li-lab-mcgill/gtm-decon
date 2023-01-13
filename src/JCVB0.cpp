@@ -26,7 +26,6 @@ void JCVB0::initialize(
 
 	trainRSSamples = new vector<SampleRS>();
 	testRSSamples = new vector<SampleRS>();
-	imputeTargetRSSamples = new vector<SampleRS>();
 
 	// initialize alpha
 	alpha = zeros<rowvec>(K);

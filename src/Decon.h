@@ -30,7 +30,6 @@ public:
 	int numOfTopics;
 	int numOfIters;
 	int numOfGeneTypes;
-	int k_nearest_neighbors;
 	int numTopicsPerCellType;
 
 	unordered_map<int,int> numOfGenes;
@@ -40,12 +39,8 @@ public:
 	string testDataFile;
 	string trainPriorFile;
 	string testPriorFile;
-	string imputeTargetsFile; // for impute targets in new RSSamples
-	string imputeRSSampleDataFile; // new RSSamples data for imputation
 
 	unordered_map<pair<int,int>, GeneParams*>* geneParamsMap;
-
-	vector<pair<int,int>> geneImputeTargets;
 
 	string newDatafile;
 
@@ -56,8 +51,6 @@ public:
 	bool inferNewSampleRSMetagene;
 
 	bool outputIntermediates;
-
-	bool imputeNewSampleRSData; // impute new RSSample data
 
 	int inferRSSampleParams_maxiter;
 
@@ -110,9 +103,6 @@ public:
 			string trainRSSampleMixFile,
 			string trainRSSampleIdFile,
 
-			string imputeTargetsFileRSSampleh,
-			string imputeRSSampleDataFileRSSampleh,
-			int knn,
 			bool saveIntermediates,
 			bool missingAtRandom,
 			int targetViewId,
@@ -127,9 +117,6 @@ public:
 	void parseTestData(JCVB0* jcvb0); // change JCVB0 within function
 	void parseTrainPrior(JCVB0* jcvb0); // Train prior
 	void parseTestPrior(JCVB0* jcvb0); // Test prior
-
-	void parseImputeTargetsFile();
-	void parseImputeRSSampleDataFile(JCVB0* jcvb0);
 
 	// parse model files
 	void parsePhi();
@@ -154,16 +141,12 @@ public:
 
 	JCVB0* parseTrainedModelFiles();
 
-	void parseImputeTargetList(); // get a list of impute targets (i.e., a subset of variables in metainfo)
-
 	JCVB0* parseNewData();
 
 	void inferNewRSSampleMetagene(JCVB0* jcvb0, bool output_to_file=false);
 	void inferNewRSSampleMetageneUnsupervised(JCVB0* jcvb0);
 
 	void inferTrainRSSampleMetagene(); // infer and save the train RSSample mix for imputing test RSSamples
-	void imputeNewGeneData(JCVB0* jcvb0, int nearestNeighborK);
-	void imputeNewRSSampleData(int nearestNeighborK);
 };
 
 #endif

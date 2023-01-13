@@ -49,11 +49,9 @@ public:
 
 	int D_train;
 	int D_test;
-	int D_impute; // number of RSSamples to impute
 
 	vector<SampleRS> *trainRSSamples;
 	vector<SampleRS> *testRSSamples;
-	vector<SampleRS> *imputeTargetRSSamples;
 
 	void initialize(
 			unordered_map<int,int> geneCnt,

@@ -18,13 +18,8 @@ Decon* parseCmdLine(int argc, char *argv[]) {
 	string newDatafile="";
 	string trainedModelPrefix="";
 
-	string imputeTargetsFile="";
-	string imputeRSSampleDataFile="";
-
 	string trainRSSampleMetageneFile="";
 	string trainRSSampleIdFile = "";
-
-	int impute_knn = 25;
 
 	string output_dir=".";
 
@@ -150,18 +145,6 @@ Decon* parseCmdLine(int argc, char *argv[]) {
 
 				trainRSSampleIdFile = string(argv[i+1]);
 
-			} else if(argComp.compare("--imputeTargetsFile")== 0) {
-
-				imputeTargetsFile = string(argv[i+1]);
-
-			} else if(argComp.compare("--imputeRSSampleDataFile")==0) {
-
-				imputeRSSampleDataFile = string(argv[i+1]);
-
-			} else if(argComp.compare("--knn_impute") == 0) {
-
-				impute_knn = atoi(argv[i+1]);
-
 			} else if(argComp.compare("--outputIntermediates")== 0) {
 
 				outputIntermediates = true;
@@ -220,9 +203,6 @@ Decon* parseCmdLine(int argc, char *argv[]) {
 			trainRSSampleMetageneFile,
 			trainRSSampleIdFile,
 
-			imputeTargetsFile,
-			imputeRSSampleDataFile,
-			impute_knn,
 			outputIntermediates,
 			mar, 
 			targetViewId,
