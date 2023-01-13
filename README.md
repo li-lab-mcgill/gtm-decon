@@ -17,7 +17,7 @@ make
 ```
 
 ## Preparing data:
-See toy_dataset.tar.gz for format of training data (based on pancreatic scRNA-seq data)
+See pancreas_dataset.tar.gz for format of training data (based on pancreatic scRNA-seq data). See decon.sh and DEgenes.sh shell scripts for sample scripts.
 
 To run GTM-decon, the following files are required:
 
