@@ -23,7 +23,7 @@ BULKDATA_FILE = "bulkData.txt"
 GATHERED_RESULTS_FILE = "gatheredResults.csv"
 PARAMETERS_FILE = "GTMParameters.json"
 
-class GTMDecon:
+class GTM_decon:
     '''
     Wrapper class for GTM-decon engine.
 
@@ -41,7 +41,7 @@ class GTMDecon:
         output_intermediates : bool
         override_geneset : bool
             - flag to use self.genes instead of the genes in the reference
-            - not recommended, better to preprocess genes in DataFrame or AnnData before passing to GTMDecon
+            - not recommended, better to preprocess genes in DataFrame or AnnData before passing to GTM-decon
     '''
 
     prior_dict = {
@@ -131,7 +131,7 @@ class GTMDecon:
 
     def load_parameters(self, path, json_name=""):
         '''
-        Loads GTMDecon parameters from GTMParameters.json file that was previously saved. Defaults to finding "GTMParameters.json" in path, can optionally provide filename if it is different.
+        Loads GTM-decon parameters from GTMParameters.json file that was previously saved. Defaults to finding "GTMParameters.json" in path, can optionally provide filename if it is different.
 
         Args:
             path : str
@@ -175,7 +175,7 @@ class GTMDecon:
 
     def save_parameters(self, path, json_name=""):
         '''
-        Saves GTMDecon parameters to json file. Defaults to "GTMParameters.json" in path directory, can optionally provide filename if it is different.
+        Saves GTM-decon parameters to json file. Defaults to "GTMParameters.json" in path directory, can optionally provide filename if it is different.
 
         Args:
             path : str
@@ -907,65 +907,6 @@ class GTMDecon:
 
 
 if __name__ == "__main__":
-    # ref_data = pd.read_csv("/home/mcb/users/zhuang35/projects/GTM/revision_gb/Brain/Reference/Lake/renamed_merged_counts_matrix.tab", sep="\t")
-    # ref_data = ref_data.drop(columns=['Unnamed: 0', 'Unnamed:0', 'Batch'])
-
-
-    # bulk_data = pd.read_csv("/home/mcb/users/zhuang35/projects/GTM/revision_gb/Brain/geneExprRaw_subset.csv")
-    # bulk_data = bulk_data.set_index('Unnamed:0', drop=True)
-
-    
-    # directory = "/home/mcb/users/zhuang35/projects/GTM/revision_gb/wrapper_test/brain2/"
-    # engine_path = "/home/mcb/users/slaksh1/projects/revision_gb/gtm-decon-phinorm/gtm-decon-plus-noupd-ab-phinorm"
-
-    # GTM = GTMWrapper()
-    # GTM.pipeline(
-    #     bulk_data=bulk_data, reference_data=ref_data, directory=directory, n_topics=2, engine_path=engine_path, n_iter=5
-    # )
-
-    # example
-    # sc_data = pd.read_csv("/home/mcb/users/zhuang35/projects/GTM/data/fix_leak/Segerstolpe/counts_matrix.tab", sep="\t")
-    # sc_data = sc_data.drop(columns=['Unnamed: 0', 'Unnamed:0', 'Batch'])
-
-    # bulk_data = pd.read_csv("/home/mcb/users/zhuang35/projects/GTM/data/fix_leak/Segerstolpe/AZ/AZ_artificial_bulkRS.csv")
-    # bulk_data = bulk_data.set_index('Unnamed:0')
-
-    # GTM = GTMWrapper()
-    # GTM.n_topics = 5
-
-    # GTM.generate_reference_input(
-    #     output_path = '/home/mcb/users/zhuang35/projects/GTM/revision_gb/notebook/test_txt/',
-    #     reference_DataFrame = sc_data,
-    # )
-
-    # GTM.generate_bulk_input(
-    #     '/home/mcb/users/zhuang35/projects/GTM/revision_gb/notebook/test_txt/', 
-    #     bulk_DataFrame = bulk_data,
-    #     dump_bulk_info_path='/home/mcb/users/zhuang35/projects/GTM/revision_gb/notebook/test_txt/test_bulk_sample_names.txt',
-    # )
-
-    # GTM.save_parameters(
-    #     path = "/home/mcb/users/zhuang35/projects/GTM/revision_gb/notebook/test_txt/GTM_parameters.json",
-    # )
-
-    # GTM.load_parameters(
-    #     path = "/home/mcb/users/zhuang35/projects/GTM/revision_gb/notebook/test_txt/GTM_parameters.json"
-    # ) 
-    # GTM.engine_path = "/home/mcb/users/slaksh1/projects/revision_gb/gtm-decon-phinorm/gtm-decon-plus-noupd-ab-phinorm"
-
-
-    # GTM.run_training(
-    #     data_path = "/home/mcb/users/zhuang35/projects/GTM/revision_gb/notebook/test_txt/",
-    #     n_iter=5,
-    # )
-
-
-    # GTM.run_deconvolution(
-    #     model_dir = "/home/mcb/users/zhuang35/projects/GTM/revision_gb/notebook/test_txt/",
-    #     data_path = "/home/mcb/users/zhuang35/projects/GTM/revision_gb/notebook/test_txt/"
-    # )
-
-
 
     pass
 
