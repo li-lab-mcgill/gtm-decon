@@ -260,9 +260,9 @@ class GTM_decon:
 
         subprocess_commands = [
                 self.engine_path,
-                "-f", os.path.join(directory, REFERENCE_FILE), # f"{directory}{REFERENCE_FILE}",
-                "-m", os.path.join(directory, META_FILE), # f"{directory}{META_FILE}",
-                "-trp", os.path.join(directory, PRIOR_FILE), # f"{directory}{PRIOR_FILE}",
+                "-f", os.path.join(directory, REFERENCE_FILE), # directory/REFERENCE_FILE}
+                "-m", os.path.join(directory, META_FILE), # directory/META_FILE}
+                "-trp", os.path.join(directory, PRIOR_FILE), # directory/PRIOR_FILE}
                 "-k", f"{K}",
                 "-i", f"{n_iter}",
                 "--inferenceMethod", inferenceMethod,
@@ -335,10 +335,10 @@ class GTM_decon:
             subprocess.run(
                 [
                     self.engine_path,
-                    "-m", os.path.join(directory, META_FILE), #f"{directory}{META_FILE}",
+                    "-m", os.path.join(directory, META_FILE), # {directory/META_FILE}
                     "-n", inferenceMethod,
-                    "--newRSSamplesData", os.path.join(data_directory, BULKDATA_FILE), #f"{data_directory}{BULKDATA_FILE}",
-                    "--trainedModelPrefix", os.path.join(directory, model), #f"{directory}{model}",
+                    "--newRSSamplesData", os.path.join(data_directory, BULKDATA_FILE), # data_directory/BULKDATA_FILE}
+                    "--trainedModelPrefix", os.path.join(directory, model), # directory/model
                     "-k", f"{K}",
                     "--inferNewSampleRSMetagene",
                     "--inferPatParams_maxiter", "100", # ? 
@@ -435,31 +435,31 @@ class GTM_decon:
 
         # genes.txt
         if self.verbose:
-            print(f'Saving genes file to {directory}{GENES_FILE} ...')
+            print(f'Saving genes file to {os.path.join(directory, GENES_FILE)} ...')
 
         with open(os.path.join(directory, GENES_FILE), 'w') as f:
             for g in self.genes:
                 print(g, file=f)
 
         if self.verbose:
-            print(f'Successfully wrote genes file to {directory}{GENES_FILE}')
+            print(f'Successfully wrote genes file to {os.path.join(directory, GENES_FILE)}')
 
 
         # meta.txt
         if self.verbose:
-            print(f'Saving genes file to {directory}{GENES_FILE} ...')
+            print(f'Saving meta file to {os.path.join(directory, META_FILE)} ...')
 
         with open(os.path.join(directory, META_FILE), 'w') as f:
             for i in range(1, len(self.genes) + 1):
                 print(f"1 {i} 0", file=f)
         
         if self.verbose:
-            print(f'Successfully wrote meta file to {directory}{META_FILE}')
+            print(f'Successfully wrote meta file to {os.path.join(directory, META_FILE)}')
 
         
         # trainData.txt
         if self.verbose:
-            print(f'Saving training file to {directory}{REFERENCE_FILE} ...')
+            print(f'Saving training file to {os.path.join(directory, REFERENCE_FILE)} ...')
 
 
         if reference_DataFrame is not None:
@@ -504,12 +504,12 @@ class GTM_decon:
         
 
         if self.verbose:
-            print(f'Successfully wrote training file to {directory}{REFERENCE_FILE}')
+            print(f'Successfully wrote training file to {os.path.join(directory, REFERENCE_FILE)}')
 
 
         # priorData.txt
         if self.verbose:
-            print(f'Saving prior file to {directory}{PRIOR_FILE} ...')
+            print(f'Saving prior file to {os.path.join(directory, PRIOR_FILE)} ...')
 
         prior_val = self.prior_dict[self.n_topics]
         with open(os.path.join(directory, PRIOR_FILE), 'w') as f:
@@ -530,7 +530,7 @@ class GTM_decon:
                                 print(f"{cell_index + 1} {celltype_index * self.n_topics + j} {round(r, 7)}", file=f)
 
         if self.verbose:
-            print(f'Successfully wrote prior file to {directory}{PRIOR_FILE}')
+            print(f'Successfully wrote prior file to {os.path.join(directory, PRIOR_FILE)}')
     
 
     def generate_bulk_input(self, 
@@ -643,7 +643,7 @@ class GTM_decon:
                                 print(f'{sample_index + 1} 1 {gene_index + 1} 0 {count}', file=f)
         
         if self.verbose:
-            print(f"Successfully wrote bulk file to {directory}{BULKDATA_FILE}")
+            print(f"Successfully wrote bulk file to {os.path.join(directory, BULKDATA_FILE)}")
 
  
     def generate_reference_input_C_implementation(self, directory, path_to_C_file, input_sc_tab_path, input_labels_oh_path, n_topics=5):
