@@ -556,7 +556,7 @@ class GTM_decon:
                 - when provided will use AnnData.var[adata_var_gene_columns]
                 - defaults to None, when not provided will use var.index as genes
             adata_obs_sample_name : str [optional]
-                - name of the column containing celltype information in AnnData.obs
+                - name of the column containing batch sample names in AnnData.obs
                 - defaults to None, when not provided will use AnnData.obs.index as sample names
             adata_layers_name : str [optional]
                 - if there is a specific layer that stores the information instead of AnnData.X
