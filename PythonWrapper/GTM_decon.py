@@ -556,7 +556,7 @@ class GTM_decon:
                 - when provided will use AnnData.var[adata_var_gene_columns]
                 - defaults to None, when not provided will use var.index as genes
             adata_obs_sample_name : str [optional]
-                - name of the column containing celltype information in AnnData.obs
+                - name of the column containing batch sample names in AnnData.obs
                 - defaults to None, when not provided will use AnnData.obs.index as sample names
             adata_layers_name : str [optional]
                 - if there is a specific layer that stores the information instead of AnnData.X
@@ -829,10 +829,10 @@ class GTM_decon:
         bulk_data, 
         reference_data, 
         directory,
-        ref_adata_var_gene_columns=None,
+        ref_adata_var_gene_column=None,
         ref_adata_obs_celltype='Celltype', 
         ref_adata_layers_name=None, 
-        bulk_adata_var_gene_columns=None,
+        bulk_adata_var_gene_column=None,
         bulk_adata_obs_sample_name=None,
         bulk_adata_layers_name=None, 
         n_topics=None, 
@@ -867,7 +867,7 @@ class GTM_decon:
             directory=directory,
             reference_DataFrame=ref_df,
             reference_AnnData=ref_ad,
-            adata_var_gene_column=ref_adata_var_gene_columns,
+            adata_var_gene_column=ref_adata_var_gene_column,
             adata_obs_celltype=ref_adata_obs_celltype,
             adata_layers_name=ref_adata_layers_name,
         )
@@ -876,7 +876,7 @@ class GTM_decon:
             directory=directory,
             bulk_DataFrame=bulk_df,
             bulk_AnnData=bulk_ad,
-            adata_var_gene_column=bulk_adata_var_gene_columns,
+            adata_var_gene_column=bulk_adata_var_gene_column,
             adata_obs_sample_name=bulk_adata_obs_sample_name,
             adata_layers_name=bulk_adata_layers_name,
         )
