@@ -33,7 +33,7 @@ Scripts for post-processing to achieve two of the most important tasks after tra
 The expected output files are also provided in the data/ folder for comparison.
 
 ## Using GTM-decon for phenotype-guided training of bulk RNA-seq data:
-Most of the steps are essentially similar to that used for cell-type-guided training of scRNA-seq data. The same scripts described above can be used for this purpose. The main difference is in the input bulk RNA-seq data matrix, which is sparsified to make it amenable for working with topic models. 
+Most of the steps are essentially similar to that used for cell-type-guided training of scRNA-seq data. The same scripts described above can be used for this purpose. The main difference is in the input bulk RNA-seq data matrix, which is sparsified to make it amenable for working with topic models (see Methods). 
 	
 ## Using GTM-decon as a nested guided topic model to identify cell-type specific differentially expressed genes between phenotypes from bulk RNA-seq data:
 Here, the phenotype-labels are used as primary-level, and cell-types as secondary-level. To generate the training data to reflect these guides,
