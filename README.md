@@ -21,7 +21,9 @@ The folder PythonWrapper/ contains the code GTM_decon.py, which is a python wrap
 
 ## Post-processing scripts:
 Scripts for post-processing to achieve two of the most important tasks after trainining and deconvolution, are listed in the post-processing folder. 
+
 a) Visualizing the genes-by-CTS-topics matrix: To visualize the top-n genes in each topic after topic, script Fig3a.R can be used. This script reproduces Fig3a in the main text. The input data, which is the normalized phi matrix obtained after training, is provided in the data folder. The script inputs this file, along with gene markers in CellMarkerDB and PanglaoDB, and visualizes the top20 genes per topic as a heatmap. Genes also present in the CellMarker DB / PanglaoDB for that specific cell type are also annotated visually.
+
 b) Visualizing the samples-by-CTS-topics matrix: This matrix corresponds to the results of deconvolution, showing the deconvolved cell type proportions for each of the bulk samples. Fig 3b.R reproduces Fig3b in the main text. The input data, which is the normalized metagene file obtained after inference, is provided in the data folder. The script inputs this file, along with phenotype information for the samples, and visualizes the clustered heatmap in terms of their cell-type proportions. Annotating the samples according to their phenotypes also enables us to visualize the effect of cell type proportions on phenotype identification.
 The expected output files are also provided in the data/ folder for comparison.
 
