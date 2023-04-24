@@ -34,13 +34,15 @@ The scripts for scRNA-seq and bulk RNA-seq data preprocessing are available in t
 	
 **b) The prepare_bulkRNAseq_input.py** file is used to transform the bulk RNA-seq data using the same genes in the same gene order as the training data
 
-The scripts for converting data from these python scripts into a format suitable as input for GTM-decon are available as C++ scripts in the util_scripts/ directory. These can be compiled using the make_util_scripts.sh folder in the gtm-decon-code/ directory. These scripts are available in C++ for improved speed. The most important scripts are 
+The scripts for converting data from these python scripts into a format suitable as input for GTM-decon are available as C++ scripts in the util_scripts/ directory. These can be compiled using the make_util_scripts.sh folder in the gtm-decon-code/ directory. These scripts are available in C++ for improved speed. The main scripts are 
 	
 **a) singleCellInput** - for generating input files for the training data, for the n-number of topics per cell type
+	
 **b) singleCellInput_BulkData** - for generating input file for bulk data
+	
 **c) singleCellInput_DE** - for generating input files for the the nested guided topic model for differential expression of genes analysis.
 	
-**## Using GTM-decon for phenotype-guided training of bulk RNA-seq data:**
+## Using GTM-decon for phenotype-guided training of bulk RNA-seq data:
 Most of the steps are essentially similar to that used for cell-type-guided training of scRNA-seq data. The same scripts described above can be used for this purpose. The main difference is in the input bulk RNA-seq data matrix, which is sparsified to make it amenable for working with topic models. 
 	
 ## Using GTM-decon as a nested guided topic model to identify cell-type specific differentially expressed genes between phenotypes from bulk RNA-seq data:
