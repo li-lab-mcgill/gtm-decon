@@ -17,7 +17,7 @@ make
 ```
 
 ## Running GTM-decon using a Python wrapper: 
-The folder PythonWrapper/ contains the code GTM_decon.py, which is a python wrapper built around the GTM-decon C code engine for simplifying its usage. It serves as a single script to train a GTM-decon model, infer cell-type proportions in bulk, and evaluate using deconvolution metrics. Please see the README.md file in the folder for more details
+The folder PythonWrapper/ contains the code GTM_decon.py, which is a python wrapper built around the GTM-decon C code engine for simplifying its usage. It serves as a single script to train a GTM-decon model, infer cell-type proportions in bulk, and evaluate using deconvolution metrics. Please see the README.md file in the folder for more details. The vignettes/ folder contains tutorials for running and analysing GTM-decon using an example scRNA-seq dataset.
 
 ## Post-processing scripts:
 Scripts for post-processing to achieve two of the most important tasks after trainining and deconvolution are listed in the post-processing folder. 
