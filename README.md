@@ -32,7 +32,7 @@ The scripts for scRNA-seq and bulk RNA-seq data preprocessing are available in t
 
 **a)** Mainly, the **prepare_single_cell_input_<dataset>.py** file serves as a template to convert the single-cell data into input datasets representing the various gene selection strategies: all genes, pre-processed genes, highly variable genes, and the corresponding transformations - normr, normr_log1p, as well in generating the cell-type mapping for each cell as a one-hot encoded file. The input file is required to have all the gene expression data as a cells X genes matrix, along with a column "Celltype" containing cell type information. 
 	
-**b) The prepare_bulkRNAseq_input.py** file is used to transform the bulk RNA-seq data using the same genes in the same gene order as the training data
+**b)** The **prepare_bulkRNAseq_input.py** file is used to transform the bulk RNA-seq data using the same genes in the same gene order as the training data
 
 The scripts for converting data from these python scripts into a format suitable as input for GTM-decon are available as C++ scripts in the util_scripts/ directory. These can be compiled using the make_util_scripts.sh folder in the gtm-decon-code/ directory. These scripts are available in C++ for improved speed. The main scripts are 
 	
@@ -50,7 +50,7 @@ Here, the phenotype-labels are used as primary-level, and cell-types as secondar
 ```
 ./singleCellInput_DE $input_dir/counts_matrix_train.tab $input_dir/cell_labels_oh_train.csv $output_dir/ <number of topics per cell-type> <number of cell-types>
 ```
-The approach also requires pre-trained GTM-decon &Phi; matrices, concatenated X <number of phenotypes> to serve as the input &Phi; matrix for training. The key is to transform this matrix to contain the same genes present in the bulk RNAseq data for phenotypes, in the same order. Refer to the script *.sh for an example.
+The approach also requires pre-trained GTM-decon &Phi; matrices, concatenated X number of phenotypes to serve as the input &Phi; matrix for training. The key is to transform this matrix to contain the same genes present in the bulk RNAseq data for phenotypes, in the same order. 
 
 The input cell-type specific pre-trained &Phi; matrices are fine-tuned to reflect changes in the phenotypes using GTM-decon:
 ```
