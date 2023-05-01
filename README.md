@@ -24,14 +24,6 @@ Mainly, the **prepare_single_cell_input_PBMC.py** file serves as a template to c
 ## Running GTM-decon using a Python wrapper: 
 The folder **PythonWrapper/** contains the code **GTM_decon.py**, which is a python wrapper built around the GTM-decon C code engine for simplifying its usage. It serves as a single script to train a GTM-decon model, infer cell-type proportions in bulk, and evaluate using deconvolution metrics. Please see the README.md file in the folder for more details. The **vignettes/** folder contains tutorials for running and analysing GTM-decon using an example scRNA-seq dataset.
 
-## Post-processing scripts:
-Scripts for post-processing to achieve two of the most important tasks after trainining and deconvolution are listed in the **post-processing/** folder. 
-
-**a) Visualizing the genes-by-CTS-topics matrix:** To visualize the top-n genes in each, script Fig3a.R can be used. This script reproduces **Fig3a** in the main text. The input data, which is the normalized &Phi; matrix obtained after training, is provided in the data folder. The script inputs this file, along with gene markers in CellMarkerDB and PanglaoDB, and visualizes the top20 genes per topic as a heatmap. Genes also present in the CellMarker DB / PanglaoDB for that specific cell type (marker genes) are also annotated visually.
-
-**b) Visualizing the samples-by-CTS-topics matrix:** This matrix corresponds to the results of deconvolution, showing the deconvolved cell type proportions for each of the bulk samples. Fig 3b.R reproduces **Fig3b** in the main text. The input data, which is the normalized metagene file obtained after inference, is provided in the data folder. The script inputs this file, along with phenotype information for the samples, and visualizes the clustered heatmap in terms of their cell-type proportions. Annotating the samples according to their phenotypes also enables us to visualize the effect of cell type proportions on phenotype identification.
-The expected output files are also provided in the data/ folder for comparison.
-
 ## Using GTM-decon for phenotype-guided training of bulk RNA-seq data:
 Most of the steps are essentially similar to that used for cell-type-guided training of scRNA-seq data. The same scripts described above can be used for this purpose. The main difference is in the input bulk RNA-seq data matrix, which is sparsified to make it amenable for working with topic models (see Methods). 
 	
@@ -49,3 +41,13 @@ The input cell-type specific pre-trained &Phi; matrices are fine-tuned to reflec
 New flag:
 	--presetTopicsPrefix $preset_path (path to the concatenated input &Phi; matrix)
 ```
+
+## Post-processing scripts:
+Scripts for post-processing to achieve two of the most important tasks after trainining and deconvolution are listed in the **post-processing/** folder. 
+
+**a) Visualizing the genes-by-CTS-topics matrix:** To visualize the top-n genes in each, script Fig3a.R can be used. This script reproduces **Fig3a** in the main text. The input data, which is the normalized &Phi; matrix obtained after training, is provided in the data folder. The script inputs this file, along with gene markers in CellMarkerDB and PanglaoDB, and visualizes the top20 genes per topic as a heatmap. Genes also present in the CellMarker DB / PanglaoDB for that specific cell type (marker genes) are also annotated visually.
+
+**b) Visualizing the samples-by-CTS-topics matrix:** This matrix corresponds to the results of deconvolution, showing the deconvolved cell type proportions for each of the bulk samples. Fig 3b.R reproduces **Fig3b** in the main text. The input data, which is the normalized metagene file obtained after inference, is provided in the data folder. The script inputs this file, along with phenotype information for the samples, and visualizes the clustered heatmap in terms of their cell-type proportions. Annotating the samples according to their phenotypes also enables us to visualize the effect of cell type proportions on phenotype identification.
+The expected output files are also provided in the data/ folder for comparison.
+
+Scripts to regenerate the figures in **Fig3**, **Fig4**, **Fig5**, and **Fig6** are also available in the **post-processing/** folder, with the corresponding input and output files in the **data/** folder.
