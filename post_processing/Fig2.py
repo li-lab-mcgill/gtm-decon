@@ -289,9 +289,7 @@ def plot_fig2c(path = "../data/fig2_data/"):
     relabel = {
         'T cell':'Tcells', 
         'B cell':'Bcells', 
-    #     'Monocytes', 
         'NK cell':'NKcells', 
-    #     'Neutrophils'
     }
 
     bisque['labels'] = bisque['labels'].replace(relabel)
@@ -332,7 +330,6 @@ def plot_fig2c(path = "../data/fig2_data/"):
         "B_NSM":"B_cell",
         "B_SM":"B_cell",
         "B_naive":"B_cell",
-        # "Basophils":"Basophils",
         "CD4_TE":"CD4+_T_cell",
         "CD4_naive":"CD4+_T_cell",
         "CD8_CM":"Cytotoxic_T_cell",
@@ -340,28 +337,17 @@ def plot_fig2c(path = "../data/fig2_data/"):
         "CD8_TE":"Cytotoxic_T_cell",
         "CD8_naive":"Cytotoxic_T_cell",
         "C_mono":"CD14+_monocyte",
-        # "I_mono":"Monocytes",
-        # "MAIT":"T cell (mucosal invariant)",
         "NC_mono":"CD16+_monocyte",
         "NK":"Natural_killer_cell",
-        # "Neutrophils":"Neutrophils",
-        # "Plasmablasts":"Plasmablast",
-        # "Progenitor":"HSPC", 
         "TFH":"CD4+_T_cell",
         "Th1":"CD4+_T_cell",
         "Th1.Th17":"CD4+_T_cell",
-        # "Th17":"T cell (helper)",
-        # "Th2":"T cell (helper)",
-        # "Treg":"T cell (regulatory)",
-        # "VD2.":"T cell (gamma delta)",
-        # "VD2..1":"T cell (gamma delta)",
         "mDC":"Dendritic_cell",
         "pDC":"Plasmacytoid_dendritic_cell"}
 
 
     music = pd.read_csv(os.path.join(path, 'PBMC_GSE107011_MUSIC_decon.csv'), index_col=0)
     bseqsc = pd.read_csv(os.path.join(path, 'PBMC_GSE107011_BSEQSC_decon.csv'), index_col=0)
-    # bisque = pd.read_csv(os.path.join(path, 'PBMC_GSE107011_BISQUE_decon.csv'), index_col=0)
     ciber = pd.read_csv(os.path.join(path, 'PBMC_GSE107011_CIBERSORTx_decon.csv'), index_col=0)
     GTM_all = pd.read_csv(os.path.join(path, 'PBMC_GSE107011_GTM_ALL_decon.csv'), index_col=0)
     GTM_pp = pd.read_csv(os.path.join(path, 'PBMC_GSE107011_GTM_PP_decon.csv'), index_col=0)
@@ -425,7 +411,6 @@ def plot_fig2c(path = "../data/fig2_data/"):
     GSE64655.columns=['drop', 'label']
     GSE64655 = GSE64655.drop(columns=['drop'])
     d = {
-    #     'DC', 
         'Monocyte':'Monocytes',
         'Neutrophil':'Neutrophils',
         'B_cell':'Bcells',
