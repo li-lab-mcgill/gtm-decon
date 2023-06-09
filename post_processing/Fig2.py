@@ -136,7 +136,8 @@ def plot_fig2a(path = "../data/fig2_data/"):
         'GTM_ALL': 'GTM-ALL',
         'GTM_PP': 'GTM-PP',
         'GTM_HVG': 'GTM-HVG',
-        'BISQUE': 'BISQUE'}
+        'BISQUE': 'BISQUE',
+        'BAYESPRISM': 'BayesPrism',}
 
     for k in COMP_STATS:
         COMP_STATS[k]['Method'] = COMP_STATS[k]['Method'].replace(rename)
@@ -157,12 +158,12 @@ def plot_fig2a(path = "../data/fig2_data/"):
             'Ref: PBMC\nBulk: PBMC-2', 
             'Ref: Blood Cells\nBulk: Whole Blood', 
             'Ref: Frontal Cortex\nBulk: Prefrontal Cortex', 
-            'Ref Bancreas\nBulk: Pancreas']
+            'Ref Pancreas\nBulk: Pancreas']
 
 
     sns.set(rc={'figure.figsize':(10, 6), 'figure.dpi':350})
     fig, axes = plt.subplots(2, 5, sharex=True)
-    order = ['GTM-ALL', 'GTM-PP', 'GTM-HVG', 'BSEQ-sc', 'CIBERSORTx', 'MuSiC', 'BISQUE']
+    order = ['GTM-ALL', 'GTM-PP', 'GTM-HVG', 'BSEQ-sc', 'CIBERSORTx', 'MuSiC', 'BayesPrism', 'BISQUE']
 
 
     for i in range(5):
@@ -263,6 +264,7 @@ def plot_fig2c(path = "../data/fig2_data/"):
     GTM_all = pd.read_csv(os.path.join(path, 'HBC_GSE107011_GTM_ALL_decon.csv'), index_col=0)
     GTM_pp = pd.read_csv(os.path.join(path, 'HBC_GSE107011_GTM_PP_decon.csv'), index_col=0)
     GTM_hvg = pd.read_csv(os.path.join(path, 'HBC_GSE107011_GTM_HVG_decon.csv'), index_col=0)
+    bayesprism = pd.read_csv(os.path.join(path, 'HBC_GSE107011_BAYESPRISM_decon.csv'), index_col=0)
 
     keep = [i for i in music.index if 'PBMC' not in i]
         
@@ -273,6 +275,7 @@ def plot_fig2c(path = "../data/fig2_data/"):
     GTM_all = GTM_all.loc[keep]
     GTM_pp = GTM_pp.loc[keep]
     GTM_hvg = GTM_hvg.loc[keep]
+    bayesprism = bayesprism.loc[keep]
 
     labels = bisque.index.str.split('_')
     labels = [i[1:] for i in labels]
@@ -285,6 +288,7 @@ def plot_fig2c(path = "../data/fig2_data/"):
     GTM_all['labels'] = bisque['labels'].values
     GTM_pp['labels'] = bisque['labels'].values
     GTM_hvg['labels'] = bisque['labels'].values
+    bayesprism['labels'] = bisque['labels'].values
 
     relabel = {
         'T cell':'Tcells', 
@@ -299,7 +303,7 @@ def plot_fig2c(path = "../data/fig2_data/"):
     GTM_all['labels'] = bisque['labels'].values
     GTM_pp['labels'] = bisque['labels'].values
     GTM_hvg['labels'] = bisque['labels'].values
-
+    bayesprism['labels'] = bisque['labels'].values
 
     acc_labels = sorted(set(bisque['labels']).intersection(bisque.columns[:-1]))
 
@@ -311,11 +315,11 @@ def plot_fig2c(path = "../data/fig2_data/"):
     bseqsc = bseqsc[bseqsc['labels'].isin(acc_labels)]
     music = music[music['labels'].isin(acc_labels)]
     bisque = bisque[bisque['labels'].isin(acc_labels)]
+    bayesprism = bayesprism[bayesprism['labels'].isin(acc_labels)]
 
 
-
-    dfs = [GTM_all, GTM_pp, GTM_hvg, ciber, bseqsc, music, bisque]
-    names = ['GTM-All', 'GTM-PP', 'GTM-HVG', 'CIBERSORTx', 'BSEQ-sc', 'MuSiC', 'BISQUE']
+    dfs = [GTM_all, GTM_pp, GTM_hvg, ciber, bseqsc, music, bayesprism, bisque]
+    names = ['GTM-All', 'GTM-PP', 'GTM-HVG', 'CIBERSORTx', 'BSEQ-sc', 'MuSiC', 'BayesPrism', 'BISQUE']
 
 
     l = []
@@ -352,7 +356,7 @@ def plot_fig2c(path = "../data/fig2_data/"):
     GTM_all = pd.read_csv(os.path.join(path, 'PBMC_GSE107011_GTM_ALL_decon.csv'), index_col=0)
     GTM_pp = pd.read_csv(os.path.join(path, 'PBMC_GSE107011_GTM_PP_decon.csv'), index_col=0)
     GTM_hvg = pd.read_csv(os.path.join(path, 'PBMC_GSE107011_GTM_HVG_decon.csv'), index_col=0)
-
+    bayesprism = pd.read_csv(os.path.join(path, 'PBMC_GSE107011_BAYESPRISM_decon.csv'), index_col=0)
 
     keep = [i for i in music.index if 'PBMC' not in i]
 
@@ -367,7 +371,7 @@ def plot_fig2c(path = "../data/fig2_data/"):
     GTM_all['labels'] = music['labels'].values
     GTM_pp['labels'] = music['labels'].values
     GTM_hvg['labels'] = music['labels'].values
-
+    bayesprism['labels'] = music['labels'].values
 
 
 
@@ -381,11 +385,11 @@ def plot_fig2c(path = "../data/fig2_data/"):
     bseqsc = bseqsc[bseqsc['labels'].isin(acc_labels)]
     music = music[music['labels'].isin(acc_labels)]
     bisque = bisque[bisque['labels'].isin(acc_labels)]
+    bayesprism = bayesprism[bayesprism['labels'].isin(acc_labels)]
 
 
-
-    dfs = [GTM_all, GTM_pp, GTM_hvg, ciber, bseqsc, music,] #bisque]
-    names = ['GTM-All', 'GTM-PP', 'GTM-HVG', 'CIBERSORTx', 'BSEQ-sc', 'MuSiC']#'BISQUE']
+    dfs = [GTM_all, GTM_pp, GTM_hvg, ciber, bseqsc, music, bayesprism] #bisque]
+    names = ['GTM-All', 'GTM-PP', 'GTM-HVG', 'CIBERSORTx', 'BSEQ-sc', 'MuSiC', 'BayesPrism']#'BISQUE']
 
 
     experiment = "Reference: PBMC2, Bulk: GSE107011"
@@ -404,6 +408,7 @@ def plot_fig2c(path = "../data/fig2_data/"):
     GTM_all = pd.read_csv(os.path.join(path, 'HBC_GSE64655_GTM_ALL_decon.csv'), index_col=0)
     GTM_pp = pd.read_csv(os.path.join(path, 'HBC_GSE64655_GTM_PP_decon.csv'), index_col=0)
     GTM_hvg = pd.read_csv(os.path.join(path, 'HBC_GSE64655_GTM_HVG_decon.csv'), index_col=0)
+    bayesprism = pd.read_csv(os.path.join(path, 'HBC_GSE64655_BAYESPRISM_decon.csv'), index_col=0)
 
     GSE64655 = pd.read_csv(os.path.join(path, 'GSE64655_annot.csv'), header=None)
     GSE64655 = GSE64655[GSE64655[2] != 'PBMC']
@@ -430,10 +435,10 @@ def plot_fig2c(path = "../data/fig2_data/"):
     GTM_hvg = GTM_hvg.loc[GSE64655.index]
     GTM_pp = GTM_pp.loc[GSE64655.index]
     GTM_all = GTM_all.loc[GSE64655.index]
+    bayesprism = bayesprism.loc[GSE64655.index]
 
-
-    dfs = [GTM_all, GTM_pp, GTM_hvg, ciber, bseqsc, music, bisque]
-    names = ['GTM-All', 'GTM-PP', 'GTM-HVG', 'CIBERSORTx', 'BSEQ-sc', 'MuSiC', 'BISQUE']
+    dfs = [GTM_all, GTM_pp, GTM_hvg, ciber, bseqsc, music, bayesprism, bisque]
+    names = ['GTM-All', 'GTM-PP', 'GTM-HVG', 'CIBERSORTx', 'BSEQ-sc', 'MuSiC', 'BayesPrism', 'BISQUE']
 
 
     ground_truth = GSE64655['label'].values
@@ -452,7 +457,7 @@ def plot_fig2c(path = "../data/fig2_data/"):
     GTM_all = pd.read_csv(os.path.join(path, 'PBMC_GSE64655_GTM_ALL_decon.csv'), index_col=0)
     GTM_pp = pd.read_csv(os.path.join(path, 'PBMC_GSE64655_GTM_PP_decon.csv'), index_col=0)
     GTM_hvg = pd.read_csv(os.path.join(path, 'PBMC_GSE64655_GTM_HVG_decon.csv'), index_col=0)
-
+    bayesprism = pd.read_csv(os.path.join(path, 'PBMC_GSE64655_BAYESPRISM_decon.csv'), index_col=0)
 
 
     GSE64655 = pd.read_csv("/home/mcb/users/zhuang35/projects/GTM/revision_gb/PBMC_Real_Bulk/GSE64655_annot.csv", header=None)
@@ -482,7 +487,8 @@ def plot_fig2c(path = "../data/fig2_data/"):
     GTM_pp['T_cell'] = GTM_pp['CD4+_T_cell'] + GTM_pp['Cytotoxic_T_cell']
     GTM_hvg['Monocytes'] = GTM_hvg['CD14+_monocyte'] + GTM_hvg['CD16+_monocyte']
     GTM_hvg['T_cell'] = GTM_hvg['CD4+_T_cell'] + GTM_hvg['Cytotoxic_T_cell']
-
+    bayesprism['Monocytes'] = bayesprism['CD14+_monocyte'] + bayesprism['CD16+_monocyte']
+    bayesprism['T_cell'] = bayesprism['CD4+_T_cell'] + bayesprism['Cytotoxic_T_cell']
 
     acc_labels = sorted(set(GSE64655['label']).intersection(music.columns[:-1]))
     GSE64655 = GSE64655[GSE64655['label'].isin(acc_labels)]
@@ -494,10 +500,11 @@ def plot_fig2c(path = "../data/fig2_data/"):
     GTM_hvg = GTM_hvg.loc[GSE64655.index]
     GTM_pp = GTM_pp.loc[GSE64655.index]
     GTM_all = GTM_all.loc[GSE64655.index]
+    bayesprism = bayesprism.loc[GSE64655.index]
+    
 
-
-    dfs = [GTM_all, GTM_pp, GTM_hvg, ciber, bseqsc, music, ]#bisque]
-    names = ['GTM-All', 'GTM-PP', 'GTM-HVG', 'CIBERSORTx', 'BSEQ-sc', 'MuSiC', 'BISQUE']
+    dfs = [GTM_all, GTM_pp, GTM_hvg, ciber, bseqsc, music, bayesprism]#bisque]
+    names = ['GTM-All', 'GTM-PP', 'GTM-HVG', 'CIBERSORTx', 'BSEQ-sc', 'MuSiC', 'BayesPrism']
 
 
     ground_truth = GSE64655['label'].values
@@ -555,6 +562,7 @@ def plot_fig2c(path = "../data/fig2_data/"):
     plt.suptitle('Purified Bulk PBMC Prediction Accuracy')
 
     plt.tight_layout()
+
 
 
     plt.savefig('fig2c.png', bbox_inches='tight')
