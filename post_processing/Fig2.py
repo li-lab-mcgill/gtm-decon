@@ -203,7 +203,7 @@ def plot_fig2a(path = "../data/fig2_data/"):
             'Ref: PBMC\nBulk: PBMC-2', 
             'Ref: Blood Cells\nBulk: Whole Blood', 
             'Ref: Frontal Cortex\nBulk: Prefrontal Cortex', 
-            'Ref Pancreas\nBulk: Pancreas']
+            'Ref: Pancreas\nBulk: Pancreas']
 
 
     sns.set(rc={'figure.figsize':(10, 6), 'figure.dpi':350})
@@ -681,7 +681,7 @@ def plot_fig2b_supp(path = "../data/fig2_data/"):
         'PBMC_GSE107011' : 'Ref: PBMC\nBulk: PBMC-2',
         'HBC_WB' : 'Ref: BC\nBulk: WB', 
         'Lake_ROSMAP':'Ref: FC\nBulk: PFC',
-        'SegerstolpeSC_SegerstolpeBulk':  'Ref Pancreas\nBulk: Pancreas'
+        'SegerstolpeSC_SegerstolpeBulk':  'Ref: Pancreas\nBulk: Pancreas'
     }
     df['Experiment'] = df['Experiment'].map(mapping)
 
@@ -718,7 +718,7 @@ def plot_fig2b_supp(path = "../data/fig2_data/"):
             'Ref: PBMC\nBulk: PBMC-2', 
             'Ref: Blood Cells\nBulk: Whole Blood', 
             'Ref: Frontal Cortex\nBulk: Prefrontal Cortex', 
-            'Ref Pancreas\nBulk: Pancreas']
+            'Ref: Pancreas\nBulk: Pancreas']
 
 
 
@@ -732,7 +732,7 @@ def plot_fig2b_supp(path = "../data/fig2_data/"):
             'Ref: PBMC\nBulk: PBMC-2', 
             'Ref: BC\nBulk: WB', 
             'Ref: FC\nBulk: PFC', 
-            'Ref Pancreas\nBulk: Pancreas']
+            'Ref: Pancreas\nBulk: Pancreas']
     
 
     ground_truth_list = []
@@ -820,7 +820,7 @@ def plot_fig2b_supp(path = "../data/fig2_data/"):
      'Ref: PBMC\nBulk: PBMC-2',
      'Ref: BC \nBulk: WB',
      'Ref: FC\nBulk: PFC',
-     'Ref Pancreas\nBulk: Pancreas']
+     'Ref: Pancreas\nBulk: Pancreas']
 
     
     for p in plot_order2:
@@ -1064,7 +1064,7 @@ def plot_fig2b(path = "../data/fig2_data/"):
         'PBMC_GSE107011' : 'Ref: PBMC\nBulk: PBMC-2',
         'HBC_WB' : 'Ref: BC\nBulk: WB', 
         'Lake_ROSMAP':'Ref: FC\nBulk: PFC',
-        'SegerstolpeSC_SegerstolpeBulk':  'Ref Pancreas\nBulk: Pancreas'
+        'SegerstolpeSC_SegerstolpeBulk':  'Ref: Pancreas\nBulk: Pancreas'
     }
     df['Experiment'] = df['Experiment'].map(mapping)
 
@@ -1101,7 +1101,7 @@ def plot_fig2b(path = "../data/fig2_data/"):
             'Ref: PBMC\nBulk: PBMC-2', 
             'Ref: Blood Cells\nBulk: Whole Blood', 
             'Ref: Frontal Cortex\nBulk: Prefrontal Cortex', 
-            'Ref Pancreas\nBulk: Pancreas']
+            'Ref: Pancreas\nBulk: Pancreas']
 
     order = ['GTM-ALL', 'GTM-PP', 'GTM-HVG', 'BSEQ-sc', 'CIBERSORTx', 'MuSiC', 'BayesPrism', 'BISQUE']
     
@@ -1113,7 +1113,7 @@ def plot_fig2b(path = "../data/fig2_data/"):
             'Ref: PBMC\nBulk: PBMC-2', 
             'Ref: BC\nBulk: WB', 
             'Ref: FC\nBulk: PFC', 
-            'Ref Pancreas\nBulk: Pancreas']
+            'Ref: Pancreas\nBulk: Pancreas']
     
 
     ground_truth_list = []
@@ -1201,7 +1201,7 @@ def plot_fig2b(path = "../data/fig2_data/"):
      'Ref: PBMC\nBulk: PBMC-2',
      'Ref: BC \nBulk: WB',
      'Ref: FC\nBulk: PFC',
-     'Ref Pancreas\nBulk: Pancreas']
+     'Ref: Pancreas\nBulk: Pancreas']
 
     
     for p in plot_order2:
