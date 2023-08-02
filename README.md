@@ -24,8 +24,8 @@ Mainly, the **prepare_single_cell_input_PBMC.py** file serves as a template to c
 ## Running GTM-decon using a Python wrapper: 
 The folder **PythonWrapper/** contains the code **GTM_decon.py**, which is a python wrapper built around the GTM-decon C code engine for simplifying its usage. It serves as a single script to train a GTM-decon model, infer cell-type proportions in bulk, and evaluate using deconvolution metrics. Please see the README.md file in the folder for more details. The **vignettes/** folder contains tutorials for running and analysing GTM-decon using an example scRNA-seq dataset.
 
-## Using GTM-decon for phenotype-guided training of bulk RNA-seq data:
-Most of the steps are essentially similar to that used for cell-type-guided training of scRNA-seq data. The same scripts described above can be used for this purpose. The main difference is in the input bulk RNA-seq data matrix, which is sparsified to make it amenable for working with topic models (see Methods). 
+## Using GTM-decon for phenotype-guided training of bulk / single-cell RNA-seq data:
+Most of the steps are essentially similar to that used for cell-type-guided training of scRNA-seq data. The same scripts described above can be used for this purpose. The main difference is in the input bulk RNA-seq data matrix, which is sparsified to make it amenable for working with topic models (see Methods). If the input consists of phenotypes and cell types from single cell RNA-seq data, both are used as guides, and the RNA-seq counts are used as is, without any sparsification.
 	
 ## Using GTM-decon as a nested guided topic model to identify cell-type specific differentially expressed genes between phenotypes from bulk RNA-seq data:
 Here, the phenotype-labels are used as primary-level, and cell-types as secondary-level. To generate the training data to reflect these guides,
