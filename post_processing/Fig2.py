@@ -1302,7 +1302,401 @@ def plot_fig2b(path = "../data/fig2_data/"):
 
     plt.savefig('fig2b.png', bbox_inches='tight')
 
+def plot_fig2a_merged(path = '../data/fig2_data/'):
+    files = sorted(os.listdir(path))
 
+    exp_pairs = (
+        ('HBC', 'GSE107011'),
+        ('HBC', 'WB'),
+        ('Lake', 'ROSMAP'),
+        ('PBMC', 'GSE107011'),
+        ('PBMC', 'SDY67'),
+        ('SegerstolpeSC', 'SegerstolpeBulk')
+    )
+
+
+    COMP_STATS = {f"{ref}_{bulk}" : None for ref, bulk in exp_pairs}
+    for ref, bulk in exp_pairs:
+        
+        methods = []
+        names = []
+        for file in files:
+            if ref in file and bulk in file:
+                
+                
+                if 'proportions' in file:
+                    ground_truth = pd.read_csv(os.path.join(path, file), index_col=0)
+                else:
+                    methods.append(pd.read_csv(os.path.join(path, file), index_col=0))
+                    names.append(file.split('_')[2:])
+        names = [n[0] if len(n) == 2 else '_'.join(n[:2]) for n in names]
+        
+        COMP_STATS[f"{ref}_{bulk}"] = compile_stats(
+            ground_truth,
+            methods,
+            names
+        )
+        
+    rename = {'BSEQSC': 'BSEQ-sc',
+        'CIBER': 'CIBERSORTx',
+        'MUSIC': 'MuSiC',
+        'GTM_ALL': 'GTM-ALL',
+        'GTM_PP': 'GTM-PP',
+        'GTM_HVG': 'GTM-HVG',
+        'BISQUE': 'BISQUE',
+        'BAYESPRISM': 'BayesPrism',}
+
+    for k in COMP_STATS:
+        COMP_STATS[k]['Method'] = COMP_STATS[k]['Method'].replace(rename)
+
+        
+    plot_order = [
+        'PBMC_SDY67',
+        'PBMC_GSE107011',
+        'HBC_WB',
+        'Lake_ROSMAP',
+        'SegerstolpeSC_SegerstolpeBulk'
+    ]
+
+    plot_order = [COMP_STATS[p] for p in plot_order]
+
+
+    titles = ['Ref: PBMC\nBulk: PBMC-1', 
+            'Ref: PBMC\nBulk: PBMC-2', 
+            'Ref: Blood Cells\nBulk: Whole Blood', 
+            'Ref: Frontal Cortex\nBulk: Prefrontal Cortex', 
+            'Ref Pancreas:\nBulk: Pancreas']
+
+
+    order = ['GTM-ALL', 'GTM-PP', 'GTM-HVG', 'BSEQ-sc', 'CIBERSORTx', 'MuSiC', 'BayesPrism', 'BISQUE']
+
+
+    for i in range(5):
+        for j in range(2):
+            
+            d = plot_order[i]
+            d.Method = d.Method.astype('category')
+            d.Method = d.Method.cat.set_categories(order)
+            d.sort_values('Method')
+            
+
+    for title, df in zip(titles, plot_order):
+        df['Exp'] = title
+
+    df_ = pd.concat(plot_order)
+
+
+    files = sorted(os.listdir(path))
+    gts = {}
+
+    exp_pairs = (
+        ('HBC', 'WB'),
+        ('Lake', 'ROSMAP'),
+        ('PBMC', 'GSE107011'),
+        ('PBMC', 'SDY67'),
+        ('SegerstolpeSC', 'SegerstolpeBulk')
+    )
+
+
+    COMP_STATS = {f"{ref}_{bulk}" : None for ref, bulk in exp_pairs}
+    for ref, bulk in exp_pairs:
+        
+        methods = []
+        names = []
+        for file in files:
+            if ref in file and bulk in file:
+                
+                
+                if 'proportions' in file:
+                    ground_truth = pd.read_csv(os.path.join(path, file), index_col=0)
+                    gts[f"{ref}_{bulk}"] = ground_truth
+                else:
+                    methods.append(pd.read_csv(os.path.join(path, file), index_col=0))
+                    names.append(file.split('_')[2:])
+        names = [n[0] if len(n) == 2 else '_'.join(n[:2]) for n in names]
+        
+        COMP_STATS[f"{ref}_{bulk}"] = compile_stats_celltypewise(
+            ground_truth,
+            methods,
+            names,
+            spearman=True,
+        )
+
+    l = []
+    for exp in COMP_STATS.keys():
+        
+        df = COMP_STATS[exp]
+        
+        for method in df.index:
+            for pcc in df.loc[method]:
+                l.append((exp, method, pcc))
+
+    rename = {'BSEQSC': 'BSEQ-sc',
+        'CIBER': 'CIBERSORTx',
+        'CIBERSORTx' : 'CIBERSORTx',
+        'MUSIC': 'MuSiC',
+        'GTM_ALL': 'GTM-ALL',
+        'GTM_PP': 'GTM-PP',
+        'GTM_HVG': 'GTM-HVG',
+        'BISQUE': 'BISQUE',
+        'BAYESPRISM': 'BayesPrism',}
+    order = ['GTM-ALL', 'GTM-PP', 'GTM-HVG', 'BSEQ-sc', 'CIBERSORTx', 'MuSiC', 'BayesPrism', 'BISQUE']
+
+    df = pd.DataFrame(l, columns=['Experiment', 'Method', 'PCC'])
+    df['Method'] = df['Method'].map(rename)
+    df.Method = df.Method.astype('category')
+    df.Method = df.Method.cat.set_categories(order)
+    df.sort_values('Method')
+
+
+
+    mapping = {
+        'PBMC_SDY67': 'Ref: PBMC\nBulk: PBMC-1', 
+        'PBMC_GSE107011' : 'Ref: PBMC\nBulk: PBMC-2',
+        'HBC_WB' : 'Ref: BC\nBulk: WB', 
+        'Lake_ROSMAP':'Ref: FC\nBulk: PFC',
+        'SegerstolpeSC_SegerstolpeBulk':  'Ref Pancreas:\nBulk: Pancreas'
+    }
+    df['Experiment'] = df['Experiment'].map(mapping)
+
+
+
+    rename = {'BSEQSC': 'BSEQ-sc',
+        'CIBER': 'CIBERSORTx',
+        'CIBERSORTx' : 'CIBERSORTx',
+        'MUSIC': 'MuSiC',
+        'GTM_ALL': 'GTM-ALL',
+        'GTM_PP': 'GTM-PP',
+        'GTM_HVG': 'GTM-HVG',
+        'BISQUE': 'BISQUE',
+        'BAYESPRISM': 'BayesPrism',}
+
+    for k in COMP_STATS:
+        COMP_STATS[k].index = COMP_STATS[k].index.map(rename)
+
+        
+    plot_order = [
+        'PBMC_SDY67',
+        'PBMC_GSE107011',
+        'HBC_WB',
+        'Lake_ROSMAP',
+        'SegerstolpeSC_SegerstolpeBulk'
+    ]
+    
+    gts = [gts[p] for p in plot_order]
+
+    plot_order = [COMP_STATS[p] for p in plot_order]
+
+
+    titles = ['Ref: PBMC\nBulk: PBMC-1', 
+            'Ref: PBMC\nBulk: PBMC-2', 
+            'Ref: Blood Cells\nBulk: Whole Blood', 
+            'Ref: Frontal Cortex\nBulk: Prefrontal Cortex', 
+            'Ref: Pancreas\nBulk: Pancreas']
+
+    order = ['GTM-ALL', 'GTM-PP', 'GTM-HVG', 'BSEQ-sc', 'CIBERSORTx', 'MuSiC', 'BayesPrism', 'BISQUE']
+    
+    for p in plot_order:
+        if 'BISQUE' not in p.index:
+            p.loc['BISQUE'] = np.nan
+
+    titles = ['Ref: PBMC\nBulk: PBMC-1', 
+            'Ref: PBMC\nBulk: PBMC-2', 
+            'Ref: BC\nBulk: WB', 
+            'Ref: FC\nBulk: PFC', 
+            'Ref: Pancreas\nBulk: Pancreas']
+    
+
+    ground_truth_list = []
+    for g in gts:
+        g = pd.DataFrame(g.mean(), columns=['val'])
+        g = g / g.sum()
+        g = g.reset_index()
+        ground_truth_list.append(g)
+
+    files = sorted(os.listdir(path))
+    gts = {}
+
+    exp_pairs = (
+        ('HBC', 'GSE107011'),
+        ('HBC', 'WB'),
+        ('Lake', 'ROSMAP'),
+        ('PBMC', 'GSE107011'),
+        ('PBMC', 'SDY67'),
+        ('SegerstolpeSC', 'SegerstolpeBulk')
+    )
+
+
+    COMP_STATS = {f"{ref}_{bulk}" : None for ref, bulk in exp_pairs}
+    for ref, bulk in exp_pairs:
+        
+        methods = []
+        names = []
+        for file in files:
+            if ref in file and bulk in file:
+                
+                
+                if 'proportions' in file:
+                    ground_truth = pd.read_csv(os.path.join(path, file), index_col=0)
+                    gts[f"{ref}_{bulk}"] = ground_truth
+                else:
+                    methods.append(pd.read_csv(os.path.join(path, file), index_col=0))
+                    names.append(file.split('_')[2:])
+        names = [n[0] if len(n) == 2 else '_'.join(n[:2]) for n in names]
+        
+        l = []
+        for ct in ground_truth.columns:
+            l2 = []
+            for method in methods:
+
+                _, _, _, _, RMSE, _ = compute_stats(
+                    ground_truth[ct],
+                    method.loc[ground_truth.index][ct]
+                )
+                l2.append(1 / RMSE)
+
+            l.append(l2)
+
+        df = pd.DataFrame(l, columns=names, index=ground_truth.columns).T
+        COMP_STATS[f"{ref}_{bulk}"] = df
+
+
+    rename = {'BSEQSC': 'BSEQ-sc',
+        'CIBER': 'CIBERSORTx',
+        'CIBERSORTx' : 'CIBERSORTx',
+        'MUSIC': 'MuSiC',
+        'GTM_ALL': 'GTM-ALL',
+        'GTM_PP': 'GTM-PP',
+        'GTM_HVG': 'GTM-HVG',
+        'BISQUE': 'BISQUE',
+        'BAYESPRISM': 'BayesPrism',}
+
+    for k in COMP_STATS:
+        COMP_STATS[k].index = COMP_STATS[k].index.map(rename)
+
+        
+    plot_order2 = [
+        'PBMC_SDY67',
+        'PBMC_GSE107011',
+        'HBC_WB',
+        'Lake_ROSMAP',
+        'SegerstolpeSC_SegerstolpeBulk'
+    ]
+    
+    gts = [gts[p] for p in plot_order2]
+
+    plot_order2 = [COMP_STATS[p] for p in plot_order2]
+
+
+    titles = ['Ref: PBMC\nBulk: PBMC-1',
+     'Ref: PBMC\nBulk: PBMC-2',
+     'Ref: BC \nBulk: WB',
+     'Ref: FC\nBulk: PFC',
+     'Ref Pancreas\nBulk: Pancreas']
+
+    
+    for p in plot_order2:
+        if 'BISQUE' not in p.index:
+            p.loc['BISQUE'] = np.nan
+
+    sns.set(rc={'figure.figsize': (11, 4), 'figure.dpi': 350})
+
+
+
+    po3 = [
+        p / p.max().max() for p in plot_order2
+    ]
+
+    l = []
+
+    for col in order:
+        for v in pd.concat(plot_order, axis=1).T[col]:
+            l.append((col, v))
+            
+    df = pd.DataFrame(l, columns=['Method', 'PCC'])
+
+    l = []
+
+    for col in order:
+        for v in pd.concat(po3, axis=1).T[col]:
+            l.append((col, v))
+            
+    df2 = pd.DataFrame(l, columns=['Method', 'Inv-RMSE'])
+
+
+
+    cell_type_orders = []
+    for i in range(5):
+        g = ground_truth_list[i]
+        g = g.sort_values('val', ascending=False)
+        cell_type_orders.append([i for i in g['index'].values if 'unclassified' not in i])
+
+
+    temp = []
+    for title, df in zip(titles, plot_order):
+
+
+        for i in df.index:
+            for j in df.columns:
+                temp.append((i, j, df.loc[i][j], title))
+
+    df_ct1 = pd.DataFrame(temp, columns = ['Method', 'Celltype', 'Spearman R', 'Exp'])
+
+
+    temp = []
+    for title, df in zip(titles, plot_order2):
+
+
+        for i in df.index:
+            for j in df.columns:
+                temp.append((i, j, 1/df.loc[i][j], title))
+
+    df_ct2 = pd.DataFrame(temp, columns = ['Method', 'Celltype', 'RMSE', 'Exp'])
+    
+    sns.set(rc={'figure.figsize': (11, 4), 'figure.dpi': 350})
+    fig, axes = plt.subplots(2, 2, sharex=True)
+
+    p1 = sns.boxplot(data=df_, x='Exp', y='Spearman R', hue='Method', ax = axes.flatten()[0])
+    p2 = sns.boxplot(data=df_, x='Exp', y='RMSE', hue='Method', ax = axes.flatten()[2])
+
+    handles, labels = p1.get_legend_handles_labels()
+
+    p3 = sns.boxplot(
+        data=df_ct1, 
+        x='Exp', 
+        y='Spearman R', 
+        hue='Method', 
+        ax = axes.flatten()[1],
+        hue_order = labels,
+    )
+    p4 = sns.boxplot(
+        data=df_ct2, 
+        x='Exp', 
+        y='RMSE', 
+        hue='Method', 
+        ax = axes.flatten()[3],
+        hue_order = labels,
+    )
+
+
+    for i in [p1, p2, p3, p4]:
+        i.set_xlabel('')
+        i.get_legend().remove()
+        i.set_xticklabels(titles, rotation=90)
+    #     i.set_
+    for i in [p3, p4]:
+        i.set_ylabel('')
+
+    p1.set_title('Sample-Wise Performance')
+    p3.set_title('Cell-type Specific Performance')
+
+    fig.legend(handles, labels, loc='upper right', ncol=1, bbox_to_anchor=(1.15, 0.90))
+    fig.align_ylabels()
+
+    plt.suptitle('Quantitative Real Bulk Deconvolution Performance')
+    plt.tight_layout()
+    
+    plt.savefig('Fig2a.png', bbox_inches='tight')
 
 if __name__ == "__main__":
     sns.set(rc={'figure.figsize':(10, 6), 'figure.dpi':350})
@@ -1317,6 +1711,8 @@ if __name__ == "__main__":
     sns.set(rc={'figure.figsize':(10, 6), 'figure.dpi':350})
     plot_fig2c()
 
+    sns.set(rc={'figure.figsize': (11, 4), 'figure.dpi': 350})
+    plot_fig2a_merged()
 
 
     
