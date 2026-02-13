@@ -21,7 +21,7 @@ void JCVB0::initialize(
 	iterations = maxiter;
 
 	svi = false;
-	mar = false;
+	ctsExpression = false;
 	imp = false;
 
 	trainRSSamples = new vector<SampleRS>();

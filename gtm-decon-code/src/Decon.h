@@ -64,7 +64,7 @@ public:
 	// evaluation
 	double testRSSamplesFrac;
 
-	bool mar;
+	bool ctsExpression;
 
 	int targetTypeId;
 	bool evalTargetTypeOnly;
@@ -104,7 +104,7 @@ public:
 			string trainRSSampleIdFile,
 
 			bool saveIntermediates,
-			bool missingAtRandom,
+			bool ctsExp,
 			int targetViewId,
 			bool evalTargetViewOnly,
 			int inferTestRSSampleThetaMaxiter,
@@ -144,7 +144,7 @@ public:
 
 	JCVB0* parseNewData();
 
-	void inferNewRSSampleMetagene(JCVB0* jcvb0, bool output_to_file=false);
+	void inferNewRSSampleMetagene(JCVB0* jcvb0,bool ctsExp ,bool output_to_file=false);
 	void inferNewRSSampleMetageneUnsupervised(JCVB0* jcvb0);
 
 	void inferTrainRSSampleMetagene(); // infer and save the train RSSample mix for imputing test RSSamples

@@ -19,7 +19,7 @@ public:
 	int K; //Num of Topics
 	int numTopicsCellType;
 
-	bool mar;
+	bool ctsExpression;
 	bool svi;
 	bool imp;
 

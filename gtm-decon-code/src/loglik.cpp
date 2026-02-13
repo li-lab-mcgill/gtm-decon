@@ -157,7 +157,7 @@ double JCVB0::predictLogLik() {
 // DEBUG oNLY
 rowvec JCVB0::trainLogLik_breakdowns() {
 
-	rowvec elbo_bkdw = zeros<rowvec>(4+(!mar));
+	rowvec elbo_bkdw = zeros<rowvec>(4);
 
 	int D_train = trainRSSamples->size();
 	int i = 0;

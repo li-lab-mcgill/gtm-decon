@@ -443,7 +443,7 @@ JCVB0* Decon::parseTrainedModelFiles() {
 
 	jcvb0->normalizeParams();
 
-	jcvb0->mar = mar;
+	jcvb0->ctsExpression = ctsExpression;
 
 	return jcvb0;
 }

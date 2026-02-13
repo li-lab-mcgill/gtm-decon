@@ -39,7 +39,7 @@ Decon* parseCmdLine(int argc, char *argv[]) {
 
 	bool outputIntermediates = false;
 
-	bool mar = false;
+	bool ctsExpression = false;
 
 	int inferRSSampleParams_maxiter = 10;
 
@@ -112,9 +112,9 @@ Decon* parseCmdLine(int argc, char *argv[]) {
 
 				inferMethod = string(argv[i+1]);
 
-			} else if(argComp.compare("--mar") == 0) {
+			} else if(argComp.compare("--ctsExpression") == 0) {
 
-				mar = true;
+				ctsExpression = true;
 
 			} else if(argComp.compare("--targetTypeId")== 0) { // evaluating other imputation
 
@@ -178,7 +178,7 @@ Decon* parseCmdLine(int argc, char *argv[]) {
 	cout << "iter#: " << iterations << endl;
 	cout << "convergenceThreshold: " << loglikdiff_thres << endl;
 	cout << "inference method: " << inferMethod << endl;
-	cout << "NMAR inference enabled: " << !mar << endl;
+	cout << "CTS Expression  inference enabled: " << ctsExpression << endl;
 	cout << "maxcores: " << maxcores << endl;
 	cout << "--------------------" << endl;
 
@@ -204,7 +204,7 @@ Decon* parseCmdLine(int argc, char *argv[]) {
 			trainRSSampleIdFile,
 
 			outputIntermediates,
-			mar, 
+			ctsExpression, 
 			targetViewId,
 			evalTargetViewOnly,
 			inferRSSampleParams_maxiter,
@@ -247,7 +247,7 @@ int main(int argc, char *argv[]) {
 
 		double tStart_infer = omp_get_wtime(); // @suppress("Function cannot be resolved")
 
-		decon->inferNewRSSampleMetagene(infer);
+		decon->inferNewRSSampleMetagene(infer,decon->ctsExpression);
 		//decon->inferNewRSSampleMetageneUnsupervised(infer);
 
 		double tEnd_infer = omp_get_wtime(); // @suppress("Function cannot be resolved")

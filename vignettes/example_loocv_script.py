@@ -40,7 +40,7 @@ if __name__ == "__main__":
 
 
         GTM = GTM_decon(
-            engine_path = "/home/mcb/users/slaksh1/projects/revision_gb/gtm-decon-phinorm/gtm-decon-plus-noupd-ab-phinorm", #TODO
+            engine_path = "../gtm-decon-code/gtm-decon", #TODO
             experiment_name = f'vignette-leave-out-{batch}',
             n_topics = 5,
             verbose = False,

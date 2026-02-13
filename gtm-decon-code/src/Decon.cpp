@@ -32,7 +32,7 @@ Decon::Decon(string datafile_train,
 		string trainRSSampleIDFile,
 
 		bool saveIntermediates,
-		bool missingAtRandom,
+		bool ctsExp,
 		int targetViewId,
 		bool evalTargetViewOnly,
 		int inferTestRSSampleThetaMaxiter,
@@ -94,7 +94,7 @@ Decon::Decon(string datafile_train,
 
 	outputIntermediates = saveIntermediates;
 
-	mar = missingAtRandom;
+	ctsExpression = ctsExp;
 
 	evalTargetTypeOnly = evalTargetViewOnly;
 
@@ -109,13 +109,9 @@ Decon::Decon(string datafile_train,
 	outPrefix_testData = testDataFile.substr(0, lastindex);
 
 
-	if(mar) {
-		outPrefix_trainData = outPrefix_trainData + "_" + inference + "_mar" + "_K" + to_string(numOfTopics);
-		outPrefix_testData = outPrefix_testData + "_" + inference + "_mar" + "_K" + to_string(numOfTopics);
-	} else {
-		outPrefix_trainData = outPrefix_trainData + "_" + inference + "_nmar" + "_K" + to_string(numOfTopics);
-		outPrefix_testData = outPrefix_testData + "_" + inference + "_nmar" + "_K" + to_string(numOfTopics);
-	}
+	outPrefix_trainData = outPrefix_trainData + "_" + inference + "_K" + to_string(numOfTopics);
+	outPrefix_testData = outPrefix_testData + "_" + inference + "_K" + to_string(numOfTopics);
+	
 
 
 	if(newDatafile.length() > 0) {
@@ -157,7 +153,7 @@ JCVB0* Decon::initialize_infer() {
 			*geneParamsMap 
 			);
 
-	infer->mar = mar;
+	infer->ctsExpression = ctsExpression;
 
 	infer->inferTestRSSampleMetagene_maxiter_finalRun = inferRSSampleParams_maxiter;
 
@@ -449,7 +445,7 @@ void Decon::inferTrainRSSampleMetagene() {
 
 
 // infer expectation of RSSamples' theta variables only
-void Decon::inferNewRSSampleMetagene(JCVB0* jcvb0, bool output_to_file) {
+void Decon::inferNewRSSampleMetagene(JCVB0* jcvb0, bool ctsExp ,bool output_to_file) {
 
 	string inputFile;
 
@@ -476,33 +472,32 @@ void Decon::inferNewRSSampleMetagene(JCVB0* jcvb0, bool output_to_file) {
 	vector<SampleRS>::iterator RSSample0 = jcvb0->testRSSamples->begin();
 
 	int D = jcvb0->testRSSamples->size();
-
-#pragma omp parallel for shared(j)
+	//Checking if CTS Expression Deconvolution is required
+	unordered_map<int,arma::mat> cts_gex;
+//#pragma omp parallel for shared(j)
 	for(j=0; j<D; j++) {
 
 		vector<SampleRS>::iterator RSSamplej = RSSample0 + j;
 
-		//cout << j << endl;
-		//jcvb0->inferRSSampleParams(RSSamplej, inferRSSampleParams_maxiter);
 		jcvb0->inferRSSampleParamsUnsupervised(RSSamplej, inferRSSampleParams_maxiter);
+		//Checking if CTS Expression Deconvolution is required
+		if (ctsExp){
+			//cout << "test jcvb0 numofGenes"  << jcvb0->numOfGenes[1] << std::endl;
 
+			cts_gex[j] = arma::zeros<arma::mat>(arma::uword(jcvb0->numOfGenes[1]), arma::uword(jcvb0->K));
+			for(unordered_map<pair<int,int>, int>::iterator RSSampleiter = RSSamplej->geneDict.begin(); RSSampleiter != RSSamplej->geneDict.end(); RSSampleiter++) {
+			pair<int,int> geneId = RSSampleiter->first;
+			rowvec geneWeight_ij = RSSampleiter->second * RSSamplej->gamma[geneId];
+			//cout << "cur geneId" << geneId.second << std::endl;
+			cts_gex[j].row(geneId.second-1) = geneWeight_ij;
+			}
+
+		}
 		// free up the memory allocated for the RSSample gamma hash
 		RSSamplej->gamma.clear();
 
 	}
 
-	/*
-	for(vector<SampleRS>::iterator RSSample = jcvb0->testRSSamples->begin(); RSSample != jcvb0->testRSSamples->end(); RSSample++) {
-		//rowvec metagene = RSSample->Decompress(RSSample->metagene,numOfTopics);
-
-		// output theta
-		cout << RSSample->metagene_normalized(0);
-
-		for(int k=1; k<numOfTopics; k++) {
-			cout << "," << RSSample->metagene_normalized(k);
-		}
-		cout << endl;
-	}*/
 
 	
 	for(vector<SampleRS>::iterator RSSample = jcvb0->testRSSamples->begin(); RSSample != jcvb0->testRSSamples->end(); RSSample++) {
@@ -519,6 +514,31 @@ void Decon::inferNewRSSampleMetagene(JCVB0* jcvb0, bool output_to_file) {
 	}
 
 	outfile_stream_testRSSample_theta.close();
+
+
+	//Collate spmat and print
+	if (ctsExp){
+	arma::mat cts_out;
+	for (const auto& pair : cts_gex){
+		cts_out = arma::join_rows(cts_out,pair.second);
+	}
+	cts_out.save("CTSGEx.csv",arma::csv_ascii);
+	
+	//Return sample_topic names
+	std::ofstream outfile("CTS_GEx_Samples.txt");
+	for (int d = 1; d <= D; ++d) {
+        // Loop through K subsets for each D
+        	for (int k = 1; k <= jcvb0->K; ++k) {
+            		// Write in the format D_K
+            		outfile << d << "_" << k << std::endl;
+       		 }	
+   	}	
+
+    	// Close the file after writing
+    	outfile.close();
+	}
+
+
 }
 
 
